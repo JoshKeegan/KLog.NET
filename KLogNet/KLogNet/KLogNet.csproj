@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColouredConsoleLog.cs" />
     <Compile Include="CompoundLog.cs" />
     <Compile Include="ConsoleLog.cs" />
     <Compile Include="DefaultLog.cs" />
