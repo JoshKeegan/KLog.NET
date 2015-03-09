@@ -55,10 +55,7 @@ namespace KLogNet
         //Log Level Writes
         public void Error(string message)
         {
-            if (mayWriteLevel(LogLevel.Error))
-            {
-                write(message, LogLevel.Error);
-            }
+            tryWriteLevel(LogLevel.Error, message);
         }
 
         public void Error(string message, params object[] args)
@@ -68,10 +65,7 @@ namespace KLogNet
 
         public void Warn(string message)
         {
-            if (mayWriteLevel(LogLevel.Warning))
-            {
-                write(message, LogLevel.Warning);
-            }
+            tryWriteLevel(LogLevel.Warning, message);
         }
 
         public void Warn(string message, params object[] args)
@@ -81,10 +75,7 @@ namespace KLogNet
 
         public void Info(string message)
         {
-            if (mayWriteLevel(LogLevel.Info))
-            {
-                write(message, LogLevel.Info);
-            }
+            tryWriteLevel(LogLevel.Info, message);
         }
 
         public void Info(string message, params object[] args)
@@ -94,10 +85,7 @@ namespace KLogNet
 
         public void Debug(string message)
         {
-            if (mayWriteLevel(LogLevel.Debug))
-            {
-                write(message, LogLevel.Debug);
-            }
+            tryWriteLevel(LogLevel.Debug, message);
         }
 
         public void Debug(string message, params object[] args)
@@ -106,6 +94,14 @@ namespace KLogNet
         }
 
         //Private methods
+        public void tryWriteLevel(LogLevel logLevel, string message)
+        {
+            if (mayWriteLevel(logLevel))
+            {
+                write(message, logLevel);
+            }
+        }
+
         private bool mayWriteLevel(LogLevel logLevel)
         {
             //Use bitwise AND for checking specific rights
