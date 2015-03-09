@@ -2,7 +2,7 @@
  * KLog.NET
  * FileLog - Implementation of Log that logs messages to a file (thread-safe)
  * Authors:
- *  Josh Keegan 09/03/2015
+ *  Josh Keegan 16/02/2015
  */
 
 using System;
