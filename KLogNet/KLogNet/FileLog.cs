@@ -29,8 +29,6 @@ namespace KLogNet
 
             String text = eventDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + " - " + callingFrame.GetMethod().DeclaringType.FullName + message;
 
-            Console.WriteLine(text);
-
             //thread safety
             lock (logLock)
             {
