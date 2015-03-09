@@ -21,7 +21,8 @@ namespace KLogNet
         {
             message = String.Format("{0}: {1}", logLevel.ToString(), message);
 
-            String text = eventDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + " - " + callingFrame.GetMethod().DeclaringType.FullName + message;
+            String text = eventDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + " - " + 
+                callingFrame.GetMethod().DeclaringType.FullName + ": " + message;
 
             Console.WriteLine(text);
         }
