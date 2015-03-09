@@ -108,7 +108,7 @@ namespace KLogNet
             return (this.logLevel & logLevel) == logLevel;
         }
 
-        protected abstract void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate);
+        internal abstract void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate);
 
         private static StackFrame getCallingFrame()
         {
