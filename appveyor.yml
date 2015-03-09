@@ -8,7 +8,7 @@ configuration: Release
 
 artifacts:
   - path: KLogNet\KLogNet\bin\Release\KLogNet.dll
-  - name: KLogNet.dll
+    name: KLogNet.dll
   - path: '**\*.nupkg'
 
 # PowerShell script to deploy to NuGet (runs after any unit tests, if they pass)
