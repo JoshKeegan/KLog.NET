@@ -23,11 +23,11 @@ namespace KLogNet
         private object logLock;
 
         //Log implementation
-        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame)
+        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
         {
             message = String.Format("{0}: {1}", logLevel.ToString(), message);
 
-            String text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + " - " + callingFrame.GetMethod().DeclaringType.FullName + message;
+            String text = eventDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + " - " + callingFrame.GetMethod().DeclaringType.FullName + message;
 
             Console.WriteLine(text);
 
