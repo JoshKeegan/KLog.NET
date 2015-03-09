@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleLog.cs" />
     <Compile Include="DefaultLog.cs" />
     <Compile Include="FileLog.cs" />
     <Compile Include="LogLevel.cs" />
