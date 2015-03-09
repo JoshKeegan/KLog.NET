@@ -20,7 +20,7 @@ namespace KLogNet
     public abstract class Log
     {
         //Constants
-        private const int STACK_FRAME_SEARCH_FROM_IDX = 2;
+        private const int STACK_FRAME_SEARCH_FROM_IDX = 1;
 
         //Private Methods
         private static HashSet<Type> _typesInNamespace = null;
