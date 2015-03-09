@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -22,11 +23,11 @@ namespace KLogNet
         private object logLock;
 
         //Log implementation
-        protected override void write(string message, LogLevel logLevel)
+        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame)
         {
             message = String.Format("{0}: {1}", logLevel.ToString(), message);
 
-            String text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + " - " + getCaller() + message;
+            String text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + " - " + callingFrame.GetMethod().DeclaringType.FullName + message;
 
             Console.WriteLine(text);
 

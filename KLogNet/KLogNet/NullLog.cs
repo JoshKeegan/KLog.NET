@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -17,6 +18,6 @@ namespace KLogNet
         public NullLog()
             : base(LogLevel.None) { }
 
-        protected override void write(string message, LogLevel logLevel) { }
+        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame) { }
     }
 }

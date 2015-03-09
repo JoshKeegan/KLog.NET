@@ -98,7 +98,7 @@ namespace KLogNet
         {
             if (mayWriteLevel(logLevel))
             {
-                write(message, logLevel);
+                write(message, logLevel, getCallingFrame());
             }
         }
 
@@ -108,12 +108,11 @@ namespace KLogNet
             return (this.logLevel & logLevel) == logLevel;
         }
 
-        protected abstract void write(string message, LogLevel logLevel);
+        protected abstract void write(string message, LogLevel logLevel, StackFrame callingFrame);
 
-        protected static string getCaller()
+        private static StackFrame getCallingFrame()
         {
             StackTrace trace = new StackTrace();
-            string caller = "";
 
             //Find which method called the Log, excluding those in this namespace
             for (int i = STACK_FRAME_SEARCH_FROM_IDX; i < trace.FrameCount; i++)
@@ -127,12 +126,11 @@ namespace KLogNet
                     if (callingType != null && !typesInNamespace.Contains(callingType))
                     {
                         //Found the first frame outside of this namespace
-                        caller = String.Format("{0}: ", frame.GetMethod().DeclaringType.FullName);
-                        break;
+                        return frame;
                     }
                 }
             }
-            return caller;
+            return null;
         }
     }
 }
