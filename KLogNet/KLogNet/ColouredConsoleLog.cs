@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -45,7 +46,7 @@ namespace KLogNet
         private Dictionary<LogLevel, ConsoleColor> backgroundColours;
 
         //Log Implementation
-        internal override void write(string message, LogLevel logLevel, System.Diagnostics.StackFrame callingFrame, DateTime eventDate)
+        internal override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
         {
             //Get the current Console colours (to restore them once we've wrote the log message) 
             ConsoleColor foregroundBefore = Console.ForegroundColor;
