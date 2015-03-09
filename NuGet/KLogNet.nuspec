@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>KLog.NET</id>
+    <version>$version$</version>
+    <authors>Josh Keegan</authors>
+    <licenseUrl>https://github.com/JoshKeegan/KLog.NET/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/JoshKeegan/KLog.NET</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial public release.</releaseNotes>
+    <copyright>Copyright Josh Keegan 2011-2015</copyright>
+    <tags>logging log diagnostics logfiles tracing</tags>
+  </metadata>
+  <files>
+	<file src="..\KLogNet\KLogNet\bin\Release\KLogNet.dll" />
+  </files>
+</package>
