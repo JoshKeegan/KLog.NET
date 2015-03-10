@@ -13,9 +13,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-using KLogNet.Helpers;
+using KLog.Helpers;
 
-namespace KLogNet
+namespace KLog
 {
     public abstract class Log
     {

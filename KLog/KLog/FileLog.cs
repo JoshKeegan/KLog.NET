@@ -13,7 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace KLogNet
+namespace KLog
 {
     public class FileLog : Log, IDisposable
     {

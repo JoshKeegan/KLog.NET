@@ -13,6 +13,6 @@
     <tags>logging log diagnostics logfiles tracing</tags>
   </metadata>
   <files>
-	<file src="..\KLogNet\KLogNet\bin\Release\KLogNet.dll" target="lib" />
+	<file src="..\KLog\KLog\bin\Release\KLog.dll" target="lib" />
   </files>
 </package>

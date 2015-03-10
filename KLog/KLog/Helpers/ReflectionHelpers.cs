@@ -11,7 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace KLogNet.Helpers
+namespace KLog.Helpers
 {
     public static class ReflectionHelpers
     {

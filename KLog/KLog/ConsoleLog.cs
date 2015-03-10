@@ -12,7 +12,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace KLogNet
+namespace KLog
 {
     public class ConsoleLog : Log
     {

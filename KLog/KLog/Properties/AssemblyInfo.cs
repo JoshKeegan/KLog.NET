@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("KLogNet")]
+[assembly: AssemblyTitle("KLog")]
 [assembly: AssemblyDescription("KLog.NET")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("KLogNet")]
+[assembly: AssemblyProduct("KLog")]
 [assembly: AssemblyCopyright("Copyright © Josh Keegan 2012-2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

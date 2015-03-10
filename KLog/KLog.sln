@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KLogNet", "KLogNet\KLogNet.csproj", "{A5890FBE-7970-419F-9F73-B9A31E98A267}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KLog", "KLog\KLog.csproj", "{A5890FBE-7970-419F-9F73-B9A31E98A267}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

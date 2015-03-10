@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace KLogNet
+namespace KLog
 {
     public class ColouredConsoleLog : ConsoleLog
     {
