@@ -94,7 +94,7 @@ namespace KLog
         }
 
         //Private methods
-        public void tryWriteLevel(LogLevel logLevel, string message)
+        private void tryWriteLevel(LogLevel logLevel, string message)
         {
             if (mayWriteLevel(logLevel))
             {
