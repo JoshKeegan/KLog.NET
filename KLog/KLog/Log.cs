@@ -60,7 +60,7 @@ namespace KLog
 
         public void Error(string message, params object[] args)
         {
-            Error(String.Format(message, args));
+            tryWriteLevel(LogLevel.Error, message, args);
         }
 
         public void Warn(string message)
@@ -70,7 +70,7 @@ namespace KLog
 
         public void Warn(string message, params object[] args)
         {
-            Warn(String.Format(message, args));
+            tryWriteLevel(LogLevel.Warning, message, args);
         }
 
         public void Info(string message)
@@ -80,7 +80,7 @@ namespace KLog
 
         public void Info(string message, params object[] args)
         {
-            Info(String.Format(message, args));
+            tryWriteLevel(LogLevel.Info, message, args);
         }
 
         public void Debug(string message)
@@ -90,7 +90,7 @@ namespace KLog
 
         public void Debug(string message, params object[] args)
         {
-            Debug(String.Format(message, args));
+            tryWriteLevel(LogLevel.Debug, message, args);
         }
 
         //Private methods
@@ -99,6 +99,14 @@ namespace KLog
             if (mayWriteLevel(logLevel))
             {
                 write(message, logLevel, getCallingFrame(), DateTime.Now);
+            }
+        }
+
+        private void tryWriteLevel(LogLevel logLevel, string message, object[] args)
+        {
+            if(mayWriteLevel(logLevel))
+            {
+                write(String.Format(message, args), logLevel, getCallingFrame(), DateTime.Now);
             }
         }
 
