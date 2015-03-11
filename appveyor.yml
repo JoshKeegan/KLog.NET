@@ -5,7 +5,7 @@ configuration: Release
 artifacts:
   - path: KLog\KLog\bin\Release\KLog.dll
     name: KLog.dll
-  - path: '**\*.nupkg'
+  - path: '**\KLog*.nupkg'
 
 # PowerShell script to deploy to NuGet (runs after any unit tests, if they pass)
 after_test:
