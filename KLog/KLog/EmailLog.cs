@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Threading;
 
 namespace KLog
 {
@@ -22,8 +23,12 @@ namespace KLog
 
         private string fromAddress;
         private string toAddress;
-        private SmtpClient smtpClient;
+        private string smtpServerHostname;
+        private int? smtpServerPort = null;
+        private string smtpUsername = null;
+        private string smtpPassword = null;
         private string subject = "Log Message (KLog.NET)";
+        private int currentlySending = 0;
 
         #endregion
 
@@ -41,6 +46,36 @@ namespace KLog
 
             MailMessage mailMessage = new MailMessage(fromAddress, toAddress, subject, body);
 
+            SmtpClient smtpClient;
+            if(smtpServerPort == null)
+            {
+                smtpClient = new SmtpClient(smtpServerHostname);
+            }
+            else
+            {
+                smtpClient = new SmtpClient(smtpServerHostname, smtpServerPort.GetValueOrDefault());
+            }
+
+            if(smtpUsername != null)
+            {
+                NetworkCredential creds = new NetworkCredential(smtpUsername, smtpPassword);
+                smtpClient.Credentials = creds;
+            }
+
+            //smtpClient.Send(mailMessage);
+            smtpClient.SendCompleted += (sender, eventArgs) =>
+            {
+                //TODO: Should the EmailLog take another log to log messages to in the event of failure??
+
+                MailMessage callbackMessage = (MailMessage)eventArgs.UserState;
+
+                //Dispose of the SMTP Client and MailMessage
+                smtpClient.Dispose();
+                callbackMessage.Dispose();
+
+                currentlySending--;
+            };
+            currentlySending++;
             smtpClient.SendAsync(mailMessage, null);
         }
 
@@ -48,7 +83,8 @@ namespace KLog
 
         #region Constructors
 
-        public EmailLog(string fromAddress, string toAddress, SmtpClient smtpClient, LogLevel logLevel)
+        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname, int? smtpServerPort, 
+            string smtpUsername, string smtpPassword, LogLevel logLevel)
             : base(logLevel)
         {
             //Validation
@@ -60,9 +96,9 @@ namespace KLog
             {
                 throw new ArgumentNullException("toAddress");
             }
-            if(smtpClient == null)
+            if(smtpServerHostname == null)
             {
-                throw new ArgumentNullException("smtpClient");
+                throw new ArgumentNullException("smtpServerHostname");
             }
             //Validate fromAddress & toAddress are valid email addresses
             if(!isValidEmailAddress(fromAddress))
@@ -72,16 +108,33 @@ namespace KLog
             if(!isValidEmailAddress(toAddress))
             {
                 throw new ArgumentException("toAddress is not a valid email address");
-            }           
+            }
+            //Validate smtpServerPort
+            if(smtpServerPort != null)
+            {
+                int port = smtpServerPort.GetValueOrDefault();
+                if(port <= 0 || port > 65535)
+                {
+                    throw new ArgumentOutOfRangeException("smtpServerPort must be null or in the range 1-65,535 (inclusive)");
+                }
+            }
 
             this.fromAddress = fromAddress;
             this.toAddress = toAddress;
-            this.smtpClient = smtpClient;
+            this.smtpServerHostname = smtpServerHostname;
+            this.smtpServerPort = smtpServerPort;
+            this.smtpUsername = smtpUsername;
+            this.smtpPassword = smtpPassword;
         }
 
-        public EmailLog(string fromAddress, string toAddress, SmtpClient smtpClient, string subject, 
-            LogLevel logLevel)
-            : this(fromAddress, toAddress, smtpClient, logLevel)
+        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname, 
+            string smtpUsername, string smtpPassword, LogLevel logLevel)
+            : this(fromAddress, toAddress, smtpServerHostname, (int?)null, smtpUsername, 
+            smtpPassword, logLevel) {  }
+
+        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname, int? smtpServerPort,
+            string smtpUsername, string smtpPassword, string subject, LogLevel logLevel)
+            : this(fromAddress, toAddress, smtpServerHostname, smtpServerPort, smtpUsername, smtpPassword, logLevel)
         {
             //Only set the subject if we've been supplied with one, otherwise keep the default
             if(subject != null)
@@ -90,33 +143,12 @@ namespace KLog
             }
         }
 
-        public EmailLog(string fromAddress, string toAddress, string smtpServerHostName, string subject, 
-            LogLevel logLevel)
-            : this(fromAddress, toAddress, new SmtpClient(smtpServerHostName), subject, logLevel) {  }
-
-        public EmailLog(string fromAddress, string toAddress, string smtpServer, int smtpServerPort, 
-            string subject, LogLevel logLevel)
-            : this(fromAddress, toAddress, new SmtpClient(smtpServer, smtpServerPort), logLevel) {  }
-
-        public EmailLog(string fromAddress, string toAddress, string smtpServer, NetworkCredential smtpCred, 
-            LogLevel logLevel)
-            : this(fromAddress, toAddress, applyCredential(new SmtpClient(smtpServer),
-            smtpCred), logLevel) {  }
-
-        public EmailLog(string fromAddress, string toAddress, string smtpServer, int smtpServerPort,
-            NetworkCredential smtpCred, LogLevel logLevel)
-            : this(fromAddress, toAddress, applyCredential(new SmtpClient(smtpServer, smtpServerPort), 
-            smtpCred), logLevel) {  }
-
-        public EmailLog(string fromAddress, string toAddress, string smtpServer, int smtpServerPort, 
+        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname,
             string smtpUsername, string smtpPassword, string subject, LogLevel logLevel)
-            : this(fromAddress, toAddress, smtpServer, smtpServerPort, 
-            new NetworkCredential(smtpUsername, smtpPassword), logLevel) {  }
+            : this(fromAddress, toAddress, smtpServerHostname, null, smtpUsername, smtpPassword, 
+            subject, logLevel) { }
 
-        public EmailLog(string fromAddress, string toAddress, string smtpServer, string smtpUsername, 
-            string smtpPassword, string subject, LogLevel logLevel)
-            : this(fromAddress, toAddress, smtpServer, new NetworkCredential(smtpUsername, smtpPassword), 
-            logLevel) {  }
+        //TODO: Add more constructors which don't require optional fields
 
         #endregion
 
@@ -137,10 +169,16 @@ namespace KLog
             //Calling Dispose(): Free managed resources
             if(disposing)
             {
-                smtpClient.Dispose();
+                
             }
 
             //Dispose or finalizer, free any native resources
+
+            //Don't allow the object to be disposed of before messages have finished sending
+            while(currentlySending != 0)
+            {
+                Thread.Sleep(1);
+            }
         }
 
         #endregion
