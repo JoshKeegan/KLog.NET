@@ -43,6 +43,7 @@
     <Compile Include="CompoundLog.cs" />
     <Compile Include="ConsoleLog.cs" />
     <Compile Include="DefaultLog.cs" />
+    <Compile Include="EmailLog.cs" />
     <Compile Include="FileLog.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="Helpers\ReflectionHelpers.cs" />
