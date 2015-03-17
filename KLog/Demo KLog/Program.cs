@@ -24,6 +24,9 @@ namespace Demo_KLog
             //Initialise Console Logging
             Log consoleLog = new ColouredConsoleLog(LOG_LEVEL);
 
+            //Email logging
+            Log emailLog = new EmailLog("test@visav.net", "josh@visav.co.uk", "mail.visav.net", "test@visav.net", "Qwerty1234", "KLog Demo Email", LogLevel.Error);
+
             //Initialise file logging
             Log fileLog = null;
             bool dirCreated = false;
@@ -47,7 +50,7 @@ namespace Demo_KLog
                 logAttempt++;
             }
 
-            DefaultLog.Log = new CompoundLog(consoleLog, fileLog);
+            DefaultLog.Log = new CompoundLog(consoleLog, fileLog, emailLog);
             DefaultLog.Info("Log Initialised");
 
             if (dirCreated)
