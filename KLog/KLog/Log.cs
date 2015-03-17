@@ -110,6 +110,14 @@ namespace KLog
             }
         }
 
+        internal void tryWriteLevel(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
+        {
+            if(mayWriteLevel(logLevel))
+            {
+                write(message, logLevel, callingFrame, eventDate);
+            }
+        }
+
         private bool mayWriteLevel(LogLevel logLevel)
         {
             //Use bitwise AND for checking specific rights
@@ -117,12 +125,6 @@ namespace KLog
         }
 
         protected abstract void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate);
-
-        //Internal version of write. write should be kept protected to allow for external Log implementations
-        internal void internalWrite(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
-        {
-            write(message, logLevel, callingFrame, eventDate);
-        }
 
         private static StackFrame getCallingFrame()
         {

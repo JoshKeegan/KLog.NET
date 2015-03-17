@@ -23,7 +23,7 @@ namespace KLog
         {
             foreach(Log log in logs)
             {
-                log.internalWrite(message, logLevel, callingFrame, eventDate);
+                log.tryWriteLevel(message, logLevel, callingFrame, eventDate);
             }
         }
 
