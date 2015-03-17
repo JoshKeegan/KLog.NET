@@ -49,6 +49,7 @@
     <Compile Include="Helpers\ReflectionHelpers.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="NullLog.cs" />
+    <Compile Include="Programmatic\StackLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -116,7 +116,13 @@ namespace KLog
             return (this.logLevel & logLevel) == logLevel;
         }
 
-        internal abstract void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate);
+        protected abstract void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate);
+
+        //Internal version of write. write should be kept protected to allow for external Log implementations
+        internal void internalWrite(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
+        {
+            write(message, logLevel, callingFrame, eventDate);
+        }
 
         private static StackFrame getCallingFrame()
         {

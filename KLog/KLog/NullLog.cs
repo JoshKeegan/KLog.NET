@@ -18,6 +18,6 @@ namespace KLog
         public NullLog()
             : base(LogLevel.None) { }
 
-        internal override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate) { }
+        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate) { }
     }
 }

@@ -4,7 +4,7 @@
  * Authors:
  *  Josh Keegan 09/07/2012
  *  
- * Note on implementation: LogLeven gets checked with bitwise logic, so to log 
+ * Note on implementation: LogLevel gets checked with bitwise logic, so to log 
  *  events on multiple specific log levels, bitwise OR them together to create 
  *  the precise logging criteria desired.
  */
