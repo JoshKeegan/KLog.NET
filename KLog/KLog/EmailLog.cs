@@ -3,6 +3,9 @@
  * EmailLog - Implementation of Log that logs messages by emailing a specified address
  * Authors:
  *  Josh Keegan 16/03/2015
+ *  
+ * Note: If the program is about to close completely, it should call emailLog.BlockWhileSending()
+ *  in order to wait for any emails still being sent (async) to actually get sent.
  */
 
 using System;
@@ -67,12 +70,10 @@ namespace KLog
             {
                 //TODO: Should the EmailLog take another log to log messages to in the event of failure??
 
-                MailMessage callbackMessage = (MailMessage)eventArgs.UserState;
-
-                //Dispose of the SMTP Client and MailMessage
+                //Dispose of the SMTP Client
                 smtpClient.Dispose();
-                callbackMessage.Dispose();
 
+                //Message sent
                 currentlySending--;
             };
             currentlySending++;
@@ -152,6 +153,21 @@ namespace KLog
 
         #endregion
 
+        #region Public Methods
+
+        /// <summary>
+        /// Block the calling thread until all messages are sent
+        /// </summary>
+        public void BlockWhileSending()
+        {
+            while (currentlySending != 0)
+            {
+                Thread.Sleep(1);
+            }
+        }
+
+        #endregion
+
         #region Implement IDisposable
 
         public void Dispose()
@@ -166,6 +182,9 @@ namespace KLog
 
         protected virtual void Dispose(bool disposing)
         {
+            //Don't allow the object to be disposed of before messages have finished sending
+            BlockWhileSending();
+
             //Calling Dispose(): Free managed resources
             if(disposing)
             {
@@ -173,12 +192,6 @@ namespace KLog
             }
 
             //Dispose or finalizer, free any native resources
-
-            //Don't allow the object to be disposed of before messages have finished sending
-            while(currentlySending != 0)
-            {
-                Thread.Sleep(1);
-            }
         }
 
         #endregion

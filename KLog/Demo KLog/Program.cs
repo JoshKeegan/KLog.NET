@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 using KLog;
 
@@ -25,7 +26,7 @@ namespace Demo_KLog
             Log consoleLog = new ColouredConsoleLog(LOG_LEVEL);
 
             //Email logging
-            Log emailLog = new EmailLog("test@visav.net", "josh@visav.co.uk", "mail.visav.net", "test@visav.net", "Qwerty1234", "KLog Demo Email", LogLevel.Error);
+            EmailLog emailLog = new EmailLog("test@visav.net", "josh@visav.co.uk", "mail.visav.net", "test@visav.net", "Qwerty1234", "KLog Demo Email", LogLevel.Error);
 
             //Initialise file logging
             Log fileLog = null;
@@ -67,6 +68,9 @@ namespace Demo_KLog
 
             consoleLog.Info("Test just console log");
             fileLog.Info("Test just file log");
+
+            DefaultLog.Info("Waiting for Log Emails to be sent before application shutdown . . .");
+            emailLog.BlockWhileSending();
         }
     }
 }
