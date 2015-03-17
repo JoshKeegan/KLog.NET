@@ -112,6 +112,33 @@ namespace UnitTests
             Assert.AreEqual(ERROR_MESSAGE, log.MessageStack.Pop());
         }
 
+        [Test]
+        public void TestWriteDebugLogLevelError()
+        {
+            StackLog log = new StackLog(LogLevel.Error);
+
+            log.Debug(DEBUG_MESSAGE);
+            Assert.IsFalse(log.MessageStack.Any());
+        }
+
+        [Test]
+        public void TestWriteInfoLogLevelError()
+        {
+            StackLog log = new StackLog(LogLevel.Error);
+
+            log.Info(INFO_MESSAGE);
+            Assert.IsFalse(log.MessageStack.Any());
+        }
+
+        [Test]
+        public void TestWriteWarnLogLevelError()
+        {
+            StackLog log = new StackLog(LogLevel.Error);
+
+            log.Warn(WARNING_MESSAGE);
+            Assert.IsFalse(log.MessageStack.Any());
+        }
+
         #endregion
     }
 }
