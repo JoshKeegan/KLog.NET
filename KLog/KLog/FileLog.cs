@@ -23,7 +23,7 @@ namespace KLog
         private object logLock;
 
         //Log implementation
-        internal override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
+        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
         {
             message = String.Format("{0}: {1}", logLevel.ToString(), message);
 

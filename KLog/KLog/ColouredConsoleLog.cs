@@ -46,7 +46,7 @@ namespace KLog
         private Dictionary<LogLevel, ConsoleColor> backgroundColours;
 
         //Log Implementation
-        internal override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
+        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
         {
             //Get the current Console colours (to restore them once we've wrote the log message) 
             ConsoleColor foregroundBefore = Console.ForegroundColor;
