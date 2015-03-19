@@ -25,7 +25,7 @@ namespace KLog
         #region Private Variables
 
         private string fromAddress;
-        private string toAddress;
+        private string[] toAddresses;
         private string smtpServerHostname;
         private int? smtpServerPort = null;
         private string smtpUsername = null;
@@ -47,44 +47,48 @@ namespace KLog
                 callingFrame.GetMethod().DeclaringType.FullName,
                 message);
 
-            MailMessage mailMessage = new MailMessage(fromAddress, toAddress, subject, body);
-
-            SmtpClient smtpClient;
-            if(smtpServerPort == null)
+            //Send an email to each of the listed to addresses
+            foreach(string toAddress in toAddresses)
             {
-                smtpClient = new SmtpClient(smtpServerHostname);
+                MailMessage mailMessage = new MailMessage(fromAddress, toAddress, subject, body);
+
+                SmtpClient smtpClient;
+                if (smtpServerPort == null)
+                {
+                    smtpClient = new SmtpClient(smtpServerHostname);
+                }
+                else
+                {
+                    smtpClient = new SmtpClient(smtpServerHostname, smtpServerPort.GetValueOrDefault());
+                }
+
+                if (smtpUsername != null)
+                {
+                    NetworkCredential creds = new NetworkCredential(smtpUsername, smtpPassword);
+                    smtpClient.Credentials = creds;
+                }
+
+                //smtpClient.Send(mailMessage);
+                smtpClient.SendCompleted += (sender, eventArgs) =>
+                {
+                    //TODO: Should the EmailLog take another log to log messages to in the event of failure??
+
+                    //Dispose of the SMTP Client
+                    smtpClient.Dispose();
+
+                    //Message sent
+                    currentlySending--;
+                };
+                currentlySending++;
+                smtpClient.SendAsync(mailMessage, null);
             }
-            else
-            {
-                smtpClient = new SmtpClient(smtpServerHostname, smtpServerPort.GetValueOrDefault());
-            }
-
-            if(smtpUsername != null)
-            {
-                NetworkCredential creds = new NetworkCredential(smtpUsername, smtpPassword);
-                smtpClient.Credentials = creds;
-            }
-
-            //smtpClient.Send(mailMessage);
-            smtpClient.SendCompleted += (sender, eventArgs) =>
-            {
-                //TODO: Should the EmailLog take another log to log messages to in the event of failure??
-
-                //Dispose of the SMTP Client
-                smtpClient.Dispose();
-
-                //Message sent
-                currentlySending--;
-            };
-            currentlySending++;
-            smtpClient.SendAsync(mailMessage, null);
         }
 
         #endregion
 
         #region Constructors
 
-        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname, int? smtpServerPort, 
+        public EmailLog(string fromAddress, string[] toAddresses, string smtpServerHostname, int? smtpServerPort, 
             string smtpUsername, string smtpPassword, LogLevel logLevel)
             : base(logLevel)
         {
@@ -93,9 +97,9 @@ namespace KLog
             {
                 throw new ArgumentNullException("fromAddress");
             }
-            if(toAddress == null)
+            if(toAddresses == null)
             {
-                throw new ArgumentNullException("toAddress");
+                throw new ArgumentNullException("toAddresses");
             }
             if(smtpServerHostname == null)
             {
@@ -106,9 +110,16 @@ namespace KLog
             {
                 throw new ArgumentException("fromAddress is not a valid email address");
             }
-            if(!isValidEmailAddress(toAddress))
+            if(!toAddresses.Any())
             {
-                throw new ArgumentException("toAddress is not a valid email address");
+                throw new ArgumentException("must specify at least one email in toAddresses");
+            }
+            foreach(string toAddress in toAddresses)
+            {
+                if (!isValidEmailAddress(toAddress))
+                {
+                    throw new ArgumentException(String.Format("An value specified in toAddresses ({0}) is not a valid email address", toAddress));
+                }
             }
             //Validate smtpServerPort
             if(smtpServerPort != null)
@@ -121,21 +132,21 @@ namespace KLog
             }
 
             this.fromAddress = fromAddress;
-            this.toAddress = toAddress;
+            this.toAddresses = toAddresses;
             this.smtpServerHostname = smtpServerHostname;
             this.smtpServerPort = smtpServerPort;
             this.smtpUsername = smtpUsername;
             this.smtpPassword = smtpPassword;
         }
 
-        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname, 
+        public EmailLog(string fromAddress, string[] toAddresses, string smtpServerHostname, 
             string smtpUsername, string smtpPassword, LogLevel logLevel)
-            : this(fromAddress, toAddress, smtpServerHostname, (int?)null, smtpUsername, 
+            : this(fromAddress, toAddresses, smtpServerHostname, (int?)null, smtpUsername, 
             smtpPassword, logLevel) {  }
 
-        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname, int? smtpServerPort,
+        public EmailLog(string fromAddress, string[] toAddresses, string smtpServerHostname, int? smtpServerPort,
             string smtpUsername, string smtpPassword, string subject, LogLevel logLevel)
-            : this(fromAddress, toAddress, smtpServerHostname, smtpServerPort, smtpUsername, smtpPassword, logLevel)
+            : this(fromAddress, toAddresses, smtpServerHostname, smtpServerPort, smtpUsername, smtpPassword, logLevel)
         {
             //Only set the subject if we've been supplied with one, otherwise keep the default
             if(subject != null)
@@ -144,12 +155,35 @@ namespace KLog
             }
         }
 
-        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname,
+        public EmailLog(string fromAddress, string[] toAddresses, string smtpServerHostname,
             string smtpUsername, string smtpPassword, string subject, LogLevel logLevel)
-            : this(fromAddress, toAddress, smtpServerHostname, null, smtpUsername, smtpPassword, 
+            : this(fromAddress, toAddresses, smtpServerHostname, null, smtpUsername, smtpPassword, 
             subject, logLevel) { }
 
         //TODO: Add more constructors which don't require optional fields
+
+        /*
+         * Constructors with single "to" email address
+         */
+        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname, int? smtpServerPort, 
+            string smtpUsername, string smtpPassword, LogLevel logLevel)
+            : this(fromAddress, new string[] { toAddress }, smtpServerHostname, smtpServerPort, smtpUsername, 
+            smtpPassword, logLevel) {  }
+
+        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname,
+            string smtpUsername, string smtpPassword, LogLevel logLevel)
+            : this(fromAddress, new string[] { toAddress }, smtpServerHostname,
+            smtpUsername, smtpPassword, logLevel) {  }
+
+        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname, int? smtpServerPort,
+            string smtpUsername, string smtpPassword, string subject, LogLevel logLevel)
+            : this(fromAddress, new string[] { toAddress }, smtpServerHostname, smtpServerPort,
+            smtpUsername, smtpPassword, subject, logLevel) {  }
+
+        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname,
+            string smtpUsername, string smtpPassword, string subject, LogLevel logLevel)
+            : this(fromAddress, new string[] { toAddress }, smtpServerHostname,
+            smtpUsername, smtpPassword, subject, logLevel) {  }
 
         #endregion
 

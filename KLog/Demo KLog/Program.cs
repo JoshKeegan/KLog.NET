@@ -26,7 +26,7 @@ namespace Demo_KLog
             Log consoleLog = new ColouredConsoleLog(LOG_LEVEL);
 
             //Email logging
-            EmailLog emailLog = new EmailLog("test@visav.net", "josh@visav.co.uk", "mail.visav.net", "test@visav.net", "Qwerty1234", "KLog Demo Email", LogLevel.Error);
+            EmailLog emailLog = new EmailLog("test@visav.net", new string[] { "josh@visav.co.uk", "josh.keegan@gmx.com" }, "mail.visav.net", "test@visav.net", "Qwerty1234", "KLog Demo Email", LogLevel.Error);
 
             //Initialise file logging
             Log fileLog = null;
