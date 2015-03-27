@@ -76,5 +76,10 @@ namespace KLog
         {
             Log.Debug(message, args);
         }
+
+        public void BlockWhileWriting()
+        {
+            Log.BlockWhileWriting();
+        }
     }
 }

@@ -27,6 +27,14 @@ namespace KLog
             }
         }
 
+        public void BlockWhileWriting()
+        {
+            foreach(Log log in logs)
+            {
+                log.BlockWhileWriting();
+            }
+        }
+
         //Constructors
         public CompoundLog(IEnumerable<Log> logs)
             : base(LogLevel.All) //Allow all through the Compound Log. Each log within the compound log can have its own LogLevel
