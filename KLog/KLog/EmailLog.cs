@@ -40,7 +40,7 @@ namespace KLog
         protected override void write(string message)
         {
             //TODO: Once TextLog has custom formatting options, they should be used to format the email body text, rather than it being done here
-            string body = String.Format("A messages was logged:\n\n{0}", message);
+            string body = String.Format("A message was logged:\n\n{0}", message);
 
             //Send an email to each of the listed to addresses
             foreach(string toAddress in toAddresses)
