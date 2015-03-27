@@ -187,7 +187,7 @@ namespace KLog
         /// <summary>
         /// Block the calling thread until all messages are sent
         /// </summary>
-        public void BlockWhileWriting()
+        public override void BlockWhileWriting()
         {
             while (currentlySending != 0)
             {

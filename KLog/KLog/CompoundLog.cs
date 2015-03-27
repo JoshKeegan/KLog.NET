@@ -27,7 +27,7 @@ namespace KLog
             }
         }
 
-        public void BlockWhileWriting()
+        public override void BlockWhileWriting()
         {
             foreach(Log log in logs)
             {
