@@ -118,14 +118,6 @@ namespace KLog
             }
         }
 
-        /*internal void tryWriteLevel(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
-        {
-            if(mayWriteLevel(logLevel))
-            {
-                write(new LogEntry(message, logLevel, callingFrame, eventDate));
-            }
-        }*/
-
         internal void tryWriteLogLevel(LogEntry entry)
         {
             if(mayWriteLevel(entry.LogLevel))
@@ -140,7 +132,6 @@ namespace KLog
             return (this.logLevel & logLevel) == logLevel;
         }
 
-        //protected abstract void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate);
         protected abstract void write(LogEntry entry);
 
         private static StackFrame getCallingFrame()
