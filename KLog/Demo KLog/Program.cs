@@ -85,6 +85,7 @@ namespace Demo_KLog
 
             Task[] tasks = new Task[100];
 
+            //Do some work in other threads
             for(int i = 0; i < tasks.Length; i++)
             {
                 tasks[i] = Task.Factory.StartNew(() =>
@@ -98,6 +99,9 @@ namespace Demo_KLog
                     }
                 });
             }
+
+            //Wait for the worker threads to finish their business
+            Task.WaitAll(tasks);
 
             //Block whilst messages are still being writen out
             log.BlockWhileWriting();
