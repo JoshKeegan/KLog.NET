@@ -64,16 +64,16 @@ namespace UnitTests
             StackLog log = new StackLog(LogLevel.All);
 
             log.Debug(DEBUG_MESSAGE);
-            Assert.AreEqual(DEBUG_MESSAGE, log.MessageStack.Pop());
+            Assert.AreEqual(DEBUG_MESSAGE, log.Stack.Pop().Message);
 
             log.Info(INFO_MESSAGE);
-            Assert.AreEqual(INFO_MESSAGE, log.MessageStack.Pop());
+            Assert.AreEqual(INFO_MESSAGE, log.Stack.Pop().Message);
 
             log.Warn(WARNING_MESSAGE);
-            Assert.AreEqual(WARNING_MESSAGE, log.MessageStack.Pop());
+            Assert.AreEqual(WARNING_MESSAGE, log.Stack.Pop().Message);
 
             log.Error(ERROR_MESSAGE);
-            Assert.AreEqual(ERROR_MESSAGE, log.MessageStack.Pop());
+            Assert.AreEqual(ERROR_MESSAGE, log.Stack.Pop().Message);
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace UnitTests
             StackLog log = new StackLog(LogLevel.Debug);
 
             log.Debug(DEBUG_MESSAGE);
-            Assert.AreEqual(DEBUG_MESSAGE, log.MessageStack.Pop());
+            Assert.AreEqual(DEBUG_MESSAGE, log.Stack.Pop().Message);
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace UnitTests
             StackLog log = new StackLog(LogLevel.Info);
 
             log.Info(INFO_MESSAGE);
-            Assert.AreEqual(INFO_MESSAGE, log.MessageStack.Pop());
+            Assert.AreEqual(INFO_MESSAGE, log.Stack.Pop().Message);
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace UnitTests
             StackLog log = new StackLog(LogLevel.Warning);
 
             log.Warn(WARNING_MESSAGE);
-            Assert.AreEqual(WARNING_MESSAGE, log.MessageStack.Pop());
+            Assert.AreEqual(WARNING_MESSAGE, log.Stack.Pop().Message);
         }
 
         [Test]
@@ -109,7 +109,7 @@ namespace UnitTests
             StackLog log = new StackLog(LogLevel.Error);
 
             log.Error(ERROR_MESSAGE);
-            Assert.AreEqual(ERROR_MESSAGE, log.MessageStack.Pop());
+            Assert.AreEqual(ERROR_MESSAGE, log.Stack.Pop().Message);
         }
 
         [Test]
@@ -118,7 +118,7 @@ namespace UnitTests
             StackLog log = new StackLog(LogLevel.Error);
 
             log.Debug(DEBUG_MESSAGE);
-            Assert.IsFalse(log.MessageStack.Any());
+            Assert.IsFalse(log.Stack.Any());
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace UnitTests
             StackLog log = new StackLog(LogLevel.Error);
 
             log.Info(INFO_MESSAGE);
-            Assert.IsFalse(log.MessageStack.Any());
+            Assert.IsFalse(log.Stack.Any());
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace UnitTests
             StackLog log = new StackLog(LogLevel.Error);
 
             log.Warn(WARNING_MESSAGE);
-            Assert.IsFalse(log.MessageStack.Any());
+            Assert.IsFalse(log.Stack.Any());
         }
 
         #endregion

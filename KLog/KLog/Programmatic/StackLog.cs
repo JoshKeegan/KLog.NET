@@ -16,13 +16,12 @@ namespace KLog.Programmatic
     public class StackLog : Log
     {
         //Public Variables
-        public Stack<string> MessageStack = new Stack<string>();
+        public Stack<LogEntry> Stack = new Stack<LogEntry>();
 
         //Implement Log
         protected override void write(LogEntry entry)
         {
-            //TODO: Switch to storing a stack of the actual Log Entries themelves
-            MessageStack.Push(entry.Message);
+            Stack.Push(entry);
         }
 
         //Constructors
