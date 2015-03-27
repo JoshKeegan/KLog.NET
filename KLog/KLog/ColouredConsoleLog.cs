@@ -16,7 +16,8 @@ namespace KLog
 {
     public class ColouredConsoleLog : ConsoleLog
     {
-        //Constants
+        #region Constants
+
         private static readonly LogLevel[] REQUIRED_LOG_LEVELS = new LogLevel[] { 
             LogLevel.Debug, LogLevel.Info, LogLevel.Warning, LogLevel.Error };
 
@@ -41,11 +42,17 @@ namespace KLog
             { LogLevel.Error, ConsoleColor.Black }
         };
 
-        //Private variables
+        #endregion
+
+        #region Private Variables
+
         private Dictionary<LogLevel, ConsoleColor> foregroundColours;
         private Dictionary<LogLevel, ConsoleColor> backgroundColours;
 
-        //Log Implementation
+        #endregion
+
+        #region Log Implementation
+
         protected override void write(LogEntry entry)
         {
             //Get the current Console colours (to restore them once we've wrote the log message) 
@@ -73,7 +80,10 @@ namespace KLog
             Console.BackgroundColor = backgroundBefore;
         }
 
-        //Constructors
+        #endregion
+
+        #region Constructors
+
         public ColouredConsoleLog(LogLevel logLevel, Dictionary<LogLevel, ConsoleColor> foregroundColours,
             Dictionary<LogLevel, ConsoleColor> backgroundColours)
             : base(logLevel)
@@ -89,7 +99,10 @@ namespace KLog
         public ColouredConsoleLog(LogLevel logLevel)
             : this(logLevel, DEFAULT_FOREGROUND_COLOURS) { }
 
-        //Private helpers
+        #endregion
+
+        #region Private Helpers
+
         private static Dictionary<LogLevel, ConsoleColor> normaliseLogLevelColours(
             Dictionary<LogLevel, ConsoleColor> logLevelColours, Dictionary<LogLevel, ConsoleColor> defaults)
         {
@@ -112,5 +125,7 @@ namespace KLog
             }
             return logLevelColours;
         }
+
+        #endregion
     }
 }
