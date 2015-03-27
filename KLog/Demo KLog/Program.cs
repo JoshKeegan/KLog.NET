@@ -24,7 +24,7 @@ namespace Demo_KLog
         static void Main(string[] args)
         {
             //Initialise Console Logging
-            Log consoleLog = new ColouredConsoleLog(LOG_LEVEL);
+            Log consoleLog = new ConcurrentColouredConsoleLog(LOG_LEVEL);
 
             //Email logging
             EmailLog emailLog = new EmailLog("test@visav.net", new string[] { "josh@visav.co.uk", "josh.keegan@gmx.com" }, "mail.visav.net", "test@visav.net", "Qwerty1234", "KLog Demo Email", LogLevel.Error);
@@ -81,7 +81,7 @@ namespace Demo_KLog
 
         private static void threadSafeColouredConsoleLogDemo()
         {
-            ColouredConsoleLog log = new ColouredConsoleLog(LOG_LEVEL);
+            ConcurrentColouredConsoleLog log = new ConcurrentColouredConsoleLog(LOG_LEVEL);
 
             Task[] tasks = new Task[100];
 
