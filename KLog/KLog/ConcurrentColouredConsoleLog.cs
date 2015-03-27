@@ -19,6 +19,7 @@ namespace KLog
 {
     public class ConcurrentColouredConsoleLog : LogConcurrencyWrapper<ColouredConsoleLog>
     {
+        //Constructors (should mirror those available in ColouredConsoleLog)
         public ConcurrentColouredConsoleLog(LogLevel logLevel, Dictionary<LogLevel, ConsoleColor> foregroundColours,
             Dictionary<LogLevel, ConsoleColor> backgroundColours)
             : base(new ColouredConsoleLog(logLevel, foregroundColours, backgroundColours)) {  }
