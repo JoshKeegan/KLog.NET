@@ -7,16 +7,20 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace KLog
 {
-    public class ColouredConsoleLog : ConsoleLog
+    public class ColouredConsoleLog : ConsoleLog, IDisposable
     {
-        //Constants
+        #region Constants
+
         private static readonly LogLevel[] REQUIRED_LOG_LEVELS = new LogLevel[] { 
             LogLevel.Debug, LogLevel.Info, LogLevel.Warning, LogLevel.Error };
 
@@ -41,39 +45,33 @@ namespace KLog
             { LogLevel.Error, ConsoleColor.Black }
         };
 
-        //Private variables
+        #endregion
+
+        #region Private Variables
+
         private Dictionary<LogLevel, ConsoleColor> foregroundColours;
         private Dictionary<LogLevel, ConsoleColor> backgroundColours;
 
-        //Log Implementation
+        private bool processing = true;
+        private ConcurrentQueue<LogEntry> processingQueue = new ConcurrentQueue<LogEntry>();
+        private Task processingTask;
+        private CancellationTokenSource processingTaskCancellationTokenSource;
+
+        #endregion
+
+        #region Log Implementation
+
         protected override void write(LogEntry entry)
         {
-            //Get the current Console colours (to restore them once we've wrote the log message) 
-            ConsoleColor foregroundBefore = Console.ForegroundColor;
-            ConsoleColor backgroundBefore = Console.BackgroundColor;
-
-            //Change the colour to the appropriate one for this Log Level
-
-            //If we are changing the foreground colour
-            if(foregroundColours != null)
-            {
-                Console.ForegroundColor = foregroundColours[entry.LogLevel];
-            }
-            //If we are changing the background colour
-            if(backgroundColours != null)
-            {
-                Console.BackgroundColor = backgroundColours[entry.LogLevel];
-            }
-
-            //Write the message
-            base.write(entry);
-
-            //Change the colours back
-            Console.ForegroundColor = foregroundBefore;
-            Console.BackgroundColor = backgroundBefore;
+            //Don't actually do the write here. All writes are perfromed by the processing thread (so 
+            //  there is only one thread setting the colours)
+            processingQueue.Enqueue(entry);
         }
 
-        //Constructors
+        #endregion
+
+        #region Constructors
+
         public ColouredConsoleLog(LogLevel logLevel, Dictionary<LogLevel, ConsoleColor> foregroundColours,
             Dictionary<LogLevel, ConsoleColor> backgroundColours)
             : base(logLevel)
@@ -81,6 +79,33 @@ namespace KLog
             //Normalise the specified colours (to include a value for each of the Log Levels)
             this.foregroundColours = normaliseLogLevelColours(foregroundColours, DEFAULT_FOREGROUND_COLOURS);
             this.backgroundColours = normaliseLogLevelColours(backgroundColours, DEFAULT_BACKGROUND_COLOURS_FILLING_IN);
+
+            //Set up the processing
+            processingTaskCancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = processingTaskCancellationTokenSource.Token;
+
+            processingTask = Task.Factory.StartNew(() =>
+            {
+                //Infinite loop of checking for new log entries to write
+                while(true)
+                {
+                    //Write any entries to be written
+                    while(processingQueue.Any())
+                    {
+                        LogEntry entry;
+                        if(processingQueue.TryDequeue(out entry))
+                        {
+                            actuallyWrite(entry);
+                        }
+                    }
+
+                    //Check if this task has been cancelled
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    //Small pause to prevent 100% CPU usage
+                    Thread.Sleep(1);
+                }
+            }, cancellationToken);
         }
 
         public ColouredConsoleLog(LogLevel logLevel, Dictionary<LogLevel, ConsoleColor> foregroundColours)
@@ -89,7 +114,75 @@ namespace KLog
         public ColouredConsoleLog(LogLevel logLevel)
             : this(logLevel, DEFAULT_FOREGROUND_COLOURS) {  }
 
-        //Private helpers
+        #endregion
+
+        #region Public Methods
+
+        public void FinishWriting()
+        {
+            //Only wait for the writing to finish if we're still writing
+            if(processing)
+            {
+                //Mark processing as having finished to prevent this from running in another thread
+                processing = false;
+
+                processingTaskCancellationTokenSource.Cancel();
+
+                try
+                {
+                    processingTask.Wait();
+                }
+                catch (AggregateException aggregateException)
+                {
+                    foreach(Exception e in aggregateException.InnerExceptions)
+                    {
+                        if(e.GetType() != typeof(TaskCanceledException))
+                        {
+                            throw e;
+                        }
+                    }
+                }
+                finally
+                {
+                    processingTaskCancellationTokenSource.Dispose();
+                }
+            }
+            
+        }
+
+        #endregion
+
+        #region Implement IDisposable
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+        }
+
+        ~ColouredConsoleLog()
+        {
+            this.Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            //Write all of the log entries out before letting the log be disposed of
+            FinishWriting();
+
+            //Callling Dispose(): free managed resources
+            if(disposing)
+            {
+                processingTaskCancellationTokenSource.Dispose();
+                processingTask.Dispose();
+            }
+
+            //Dispose or finalizer, free any native resources
+        }
+
+        #endregion
+
+        #region Private Helpers
+
         private static Dictionary<LogLevel, ConsoleColor> normaliseLogLevelColours(
             Dictionary<LogLevel, ConsoleColor> logLevelColours, Dictionary<LogLevel, ConsoleColor> defaults)
         {
@@ -112,5 +205,34 @@ namespace KLog
             }
             return logLevelColours;
         }
+
+        private void actuallyWrite(LogEntry entry)
+        {
+            //Get the current Console colours (to restore them once we've wrote the log message) 
+            ConsoleColor foregroundBefore = Console.ForegroundColor;
+            ConsoleColor backgroundBefore = Console.BackgroundColor;
+
+            //Change the colour to the appropriate one for this Log Level
+
+            //If we are changing the foreground colour
+            if (foregroundColours != null)
+            {
+                Console.ForegroundColor = foregroundColours[entry.LogLevel];
+            }
+            //If we are changing the background colour
+            if (backgroundColours != null)
+            {
+                Console.BackgroundColor = backgroundColours[entry.LogLevel];
+            }
+
+            //Write the message
+            base.write(entry);
+
+            //Change the colours back
+            Console.ForegroundColor = foregroundBefore;
+            Console.BackgroundColor = backgroundBefore;
+        }
+
+        #endregion
     }
 }

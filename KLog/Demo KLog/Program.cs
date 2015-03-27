@@ -87,7 +87,7 @@ namespace Demo_KLog
             {
                 tasks[i] = Task.Factory.StartNew(() =>
                 {
-                    for(int j = 0; j < 100; j++)
+                    for(int j = 0; j < 10; j++)
                     {
                         log.Debug("debug");
                         log.Info("info");
@@ -97,7 +97,8 @@ namespace Demo_KLog
                 });
             }
 
-            Task.WaitAll(tasks);
+            //Flush out the contents of the log (i.e wait for all of the messages to actually get written to the console)
+            log.FinishWriting();
         }
     }
 }
