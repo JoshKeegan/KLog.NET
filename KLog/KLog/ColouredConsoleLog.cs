@@ -100,7 +100,10 @@ namespace KLog
                     }
 
                     //Check if this task has been cancelled
-                    cancellationToken.ThrowIfCancellationRequested();
+                    if(cancellationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
 
                     //Small pause to prevent 100% CPU usage
                     Thread.Sleep(1);
@@ -126,28 +129,15 @@ namespace KLog
                 //Mark processing as having finished to prevent this from running in another thread
                 processing = false;
 
+                //Request the cancellation
                 processingTaskCancellationTokenSource.Cancel();
 
-                try
-                {
-                    processingTask.Wait();
-                }
-                catch (AggregateException aggregateException)
-                {
-                    foreach(Exception e in aggregateException.InnerExceptions)
-                    {
-                        if(e.GetType() != typeof(TaskCanceledException))
-                        {
-                            throw e;
-                        }
-                    }
-                }
-                finally
-                {
-                    processingTaskCancellationTokenSource.Dispose();
-                }
+                //Wait for the task to finish processing
+                processingTask.Wait();
+
+                //Clean up
+                processingTaskCancellationTokenSource.Dispose();
             }
-            
         }
 
         #endregion
