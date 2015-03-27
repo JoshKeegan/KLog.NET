@@ -42,8 +42,8 @@ namespace KLog
             }
         }
 
-        //Protected Variables
-        protected LogLevel logLevel;
+        //Public Variables
+        public LogLevel logLevel { get; protected set; }
 
         //Constructors
         public Log(LogLevel logLevel)
@@ -133,6 +133,11 @@ namespace KLog
         }
 
         protected abstract void write(LogEntry entry);
+
+        internal void internalWrite(LogEntry entry)
+        {
+            write(entry);
+        }
 
         private static StackFrame getCallingFrame()
         {
