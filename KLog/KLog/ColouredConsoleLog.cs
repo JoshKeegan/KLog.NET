@@ -118,7 +118,7 @@ namespace KLog
 
         #region Public Methods
 
-        public void FinishWriting()
+        public override void BlockWhileWriting()
         {
             //Only wait for the writing to finish if we're still writing
             if(processing)
@@ -167,7 +167,7 @@ namespace KLog
         protected virtual void Dispose(bool disposing)
         {
             //Write all of the log entries out before letting the log be disposed of
-            FinishWriting();
+            BlockWhileWriting();
 
             //Callling Dispose(): free managed resources
             if(disposing)

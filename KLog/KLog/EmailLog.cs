@@ -187,7 +187,7 @@ namespace KLog
         /// <summary>
         /// Block the calling thread until all messages are sent
         /// </summary>
-        public void BlockWhileSending()
+        public void BlockWhileWriting()
         {
             while (currentlySending != 0)
             {
@@ -212,7 +212,7 @@ namespace KLog
         protected virtual void Dispose(bool disposing)
         {
             //Don't allow the object to be disposed of before messages have finished sending
-            BlockWhileSending();
+            BlockWhileWriting();
 
             //Calling Dispose(): Free managed resources
             if(disposing)

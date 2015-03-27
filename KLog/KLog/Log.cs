@@ -93,6 +93,14 @@ namespace KLog
             tryWriteLevel(LogLevel.Debug, message, args);
         }
 
+        /// <summary>
+        /// Block the calling thread until all entries are written
+        /// </summary>
+        public virtual void BlockWhileWriting() 
+        {
+            //Do nothing, method here to allow implementations to implement
+        }
+
         //Private methods
         private void tryWriteLevel(LogLevel logLevel, string message)
         {
