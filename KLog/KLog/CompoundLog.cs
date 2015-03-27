@@ -19,11 +19,11 @@ namespace KLog
         private IEnumerable<Log> logs = null;
 
         //Log Implementation
-        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
+        protected override void write(LogEntry entry)
         {
             foreach(Log log in logs)
             {
-                log.tryWriteLevel(message, logLevel, callingFrame, eventDate);
+                log.tryWriteLogLevel(entry);
             }
         }
 

@@ -15,7 +15,7 @@ using System.Text;
 
 namespace KLog
 {
-    public class FileLog : Log, IDisposable
+    public class FileLog : TextLog, IDisposable
     {
         //Private variables
         private string filePath;
@@ -23,17 +23,12 @@ namespace KLog
         private object logLock;
 
         //Log implementation
-        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
+        protected override void write(string message)
         {
-            message = String.Format("{0}: {1}", logLevel.ToString(), message);
-
-            String text = eventDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + " - " + 
-                callingFrame.GetMethod().DeclaringType.FullName + ": " + message;
-
             //thread safety
             lock (logLock)
             {
-                this.logWriter.WriteLine(text);
+                this.logWriter.WriteLine(message);
                 this.logWriter.Flush(); //Flush after writes to guard log content against program crash
             }
         }

@@ -19,9 +19,10 @@ namespace KLog.Programmatic
         public Stack<string> MessageStack = new Stack<string>();
 
         //Implement Log
-        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
+        protected override void write(LogEntry entry)
         {
-            MessageStack.Push(message);
+            //TODO: Switch to storing a stack of the actual Log Entries themelves
+            MessageStack.Push(entry.Message);
         }
 
         //Constructors

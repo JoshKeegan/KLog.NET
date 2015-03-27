@@ -20,7 +20,7 @@ using System.Threading;
 
 namespace KLog
 {
-    public class EmailLog : Log, IDisposable
+    public class EmailLog : TextLog, IDisposable
     {
         #region Private Variables
 
@@ -37,15 +37,10 @@ namespace KLog
 
         #region Log Implementation
 
-        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
+        protected override void write(string message)
         {
-            message = String.Format("{0}: {1}", logLevel.ToString(), message);
-
-            //TODO: Allow a custom format to be specified, with placeholders for different bits of data to include
-            string body = String.Format("A message was logged:\n\n{0} - {1}: {2}",
-                eventDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
-                callingFrame.GetMethod().DeclaringType.FullName,
-                message);
+            //TODO: Once TextLog has custom formatting options, they should be used to format the email body text, rather than it being done here
+            string body = String.Format("A messages was logged:\n\n{0}", message);
 
             //Send an email to each of the listed to addresses
             foreach(string toAddress in toAddresses)

@@ -14,17 +14,12 @@ using System.Text;
 
 namespace KLog
 {
-    public class ConsoleLog : Log
+    public class ConsoleLog : TextLog
     {
         //Log Implementation
-        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
+        protected override void write(string message)
         {
-            message = String.Format("{0}: {1}", logLevel.ToString(), message);
-
-            String text = eventDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + " - " + 
-                callingFrame.GetMethod().DeclaringType.FullName + ": " + message;
-
-            Console.WriteLine(text);
+            Console.WriteLine(message);
         }
 
         //Constructors

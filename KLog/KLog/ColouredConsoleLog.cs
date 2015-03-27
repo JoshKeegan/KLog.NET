@@ -1,6 +1,6 @@
 ﻿/*
  * KLog.NET
- * ColouredConsoleLog - Implementation of Log that logs messages to a file (thread safe), 
+ * ColouredConsoleLog - Implementation of Log that logs messages to the Console, 
  *  highlighting different Log Levels in different colours
  * Authors:
  *  Josh Keegan 09/03/2015
@@ -46,7 +46,7 @@ namespace KLog
         private Dictionary<LogLevel, ConsoleColor> backgroundColours;
 
         //Log Implementation
-        protected override void write(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
+        protected override void write(LogEntry entry)
         {
             //Get the current Console colours (to restore them once we've wrote the log message) 
             ConsoleColor foregroundBefore = Console.ForegroundColor;
@@ -57,16 +57,16 @@ namespace KLog
             //If we are changing the foreground colour
             if(foregroundColours != null)
             {
-                Console.ForegroundColor = foregroundColours[logLevel];
+                Console.ForegroundColor = foregroundColours[entry.LogLevel];
             }
             //If we are changing the background colour
             if(backgroundColours != null)
             {
-                Console.BackgroundColor = backgroundColours[logLevel];
+                Console.BackgroundColor = backgroundColours[entry.LogLevel];
             }
 
             //Write the message
-            base.write(message, logLevel, callingFrame, eventDate);
+            base.write(entry);
 
             //Change the colours back
             Console.ForegroundColor = foregroundBefore;

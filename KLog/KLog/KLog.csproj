@@ -45,12 +45,14 @@
     <Compile Include="DefaultLog.cs" />
     <Compile Include="EmailLog.cs" />
     <Compile Include="FileLog.cs" />
+    <Compile Include="LogEntry.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="Helpers\ReflectionHelpers.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="NullLog.cs" />
     <Compile Include="Programmatic\StackLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextLog.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
