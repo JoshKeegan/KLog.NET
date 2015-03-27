@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 
 using KLog;
+using System.Threading.Tasks;
 
 namespace Demo_KLog
 {
@@ -71,6 +72,32 @@ namespace Demo_KLog
 
             DefaultLog.Info("Waiting for Log Emails to be sent before application shutdown . . .");
             emailLog.BlockWhileSending();
+
+            //Run the thread-safety demo of the ColouredConsoleLog
+            threadSafeColouredConsoleLogDemo();
+        }
+
+        private static void threadSafeColouredConsoleLogDemo()
+        {
+            ColouredConsoleLog log = new ColouredConsoleLog(LOG_LEVEL);
+
+            Task[] tasks = new Task[100];
+
+            for(int i = 0; i < tasks.Length; i++)
+            {
+                tasks[i] = Task.Factory.StartNew(() =>
+                {
+                    for(int j = 0; j < 100; j++)
+                    {
+                        log.Debug("debug");
+                        log.Info("info");
+                        log.Warn("warn");
+                        log.Error("error");
+                    }
+                });
+            }
+
+            Task.WaitAll(tasks);
         }
     }
 }
