@@ -71,10 +71,12 @@ namespace Demo_KLog
             fileLog.Info("Test just file log");
 
             DefaultLog.Info("Waiting for Log Emails to be sent before application shutdown . . .");
-            emailLog.BlockWhileWriting();
 
             //Run the thread-safety demo of the ColouredConsoleLog
             threadSafeColouredConsoleLogDemo();
+
+            //Wait for anything in the default log to be written out
+            DefaultLog.BlockWhileWriting();
         }
 
         private static void threadSafeColouredConsoleLogDemo()
@@ -97,7 +99,7 @@ namespace Demo_KLog
                 });
             }
 
-            //Flush out the contents of the log (i.e wait for all of the messages to actually get written to the console)
+            //Block whilst messages are still being writen out
             log.BlockWhileWriting();
         }
     }
