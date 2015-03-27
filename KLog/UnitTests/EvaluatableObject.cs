@@ -1,6 +1,6 @@
 ﻿/*
  * KLog.NET Unit Tests
- * Evaluatable Object - an object that stores whether its ToString() method gets evaluated
+ * Evaluatable Object - an object that stores whether it's ToString() method gets evaluated
  * Authors:
  * Josh Keegan 11/03/2015
  */
