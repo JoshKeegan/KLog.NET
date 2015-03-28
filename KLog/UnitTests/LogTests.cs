@@ -15,8 +15,6 @@ using KLog;
 using KLog.Programmatic;
 
 using NUnit.Framework;
-using SixPack.Reflection;
-
 
 namespace UnitTests
 {
