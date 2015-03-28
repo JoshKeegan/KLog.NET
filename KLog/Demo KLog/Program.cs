@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 using KLog;
-using System.Threading.Tasks;
+
+using Npgsql;
 
 namespace Demo_KLog
 {
@@ -19,7 +21,7 @@ namespace Demo_KLog
     {
         //Constants
         private const string LOGS_DIR = "logs";
-        private const LogLevel LOG_LEVEL = LogLevel.All;
+        private const KLog.LogLevel LOG_LEVEL = KLog.LogLevel.All;
 
         static void Main(string[] args)
         {
@@ -27,7 +29,10 @@ namespace Demo_KLog
             Log consoleLog = new ConcurrentColouredConsoleLog(LOG_LEVEL);
 
             //Email logging
-            EmailLog emailLog = new EmailLog("test@visav.net", new string[] { "josh@visav.co.uk", "josh.keegan@gmx.com" }, "mail.visav.net", "test@visav.net", "Qwerty1234", "KLog Demo Email", LogLevel.Error);
+            EmailLog emailLog = new EmailLog("test@visav.net", 
+                new string[] { "josh@visav.co.uk", "josh.keegan@gmx.com" }, 
+                "mail.visav.net", "test@visav.net", "Qwerty1234", "KLog Demo Email", 
+                KLog.LogLevel.Error);
 
             //Initialise file logging
             Log fileLog = null;
@@ -41,7 +46,8 @@ namespace Demo_KLog
             int logAttempt = 0;
             while (true)
             {
-                string logName = String.Format("{0}/{1}.{2}.{3:000}.log", LOGS_DIR, "Test Log", DateTime.Now.ToString("yyyy-MM-dd"), logAttempt);
+                string logName = String.Format("{0}/{1}.{2}.{3:000}.log", LOGS_DIR, "Test Log", 
+                    DateTime.Now.ToString("yyyy-MM-dd"), logAttempt);
 
                 if (!System.IO.File.Exists(logName))
                 {
@@ -75,6 +81,9 @@ namespace Demo_KLog
             //Run the thread-safety demo of the ColouredConsoleLog
             threadSafeColouredConsoleLogDemo();
 
+            //Run the DbLog demo
+            threadSafeDbLogDemo();
+
             //Wait for anything in the default log to be written out
             DefaultLog.BlockWhileWriting();
         }
@@ -105,6 +114,51 @@ namespace Demo_KLog
 
             //Block whilst messages are still being writen out
             log.BlockWhileWriting();
+        }
+
+        private static void threadSafeDbLogDemo()
+        {
+            DbLog.GetDbConnection getDbConnection = (() =>
+            {
+                //Have had to disable connection pooling, since it seems Npgsql implements this with a normal dictionary (which isn't thread-safe)
+                return new NpgsqlConnection("Server=127.0.0.1;Port=5432;User Id=klogDemoUser;Password=wow_much_security;Database=KLog;Pooling=false");
+            });
+            DbLog.GetDbCommand getDbCommand = ((conn) =>
+            {
+                return new NpgsqlCommand("INSERT INTO demo (\"fieldA\", \"fieldB\") VALUES (:fieldA, :fieldB)", (NpgsqlConnection)conn);
+            });
+            DbLogParameter[] parameters = new DbLogParameter[]
+            {
+                new DbLogParameter(":fieldA", "valA"),
+                new DbLogParameter(":fieldB", "valB")
+            };
+
+            //TODO: Async needs some work with exception logging & the BlockWhileWriting() mechanism. So it's diabled here for now
+            using(DbLog dbLog = new DbLog(LOG_LEVEL, getDbConnection, getDbCommand, parameters, true, false))
+            {
+                //Now the log's been made, lets abuse it
+                Task[] tasks = new Task[10];
+
+                for (int i = 0; i < tasks.Length; i++)
+                {
+                    tasks[i] = Task.Factory.StartNew(() =>
+                    {
+                        for (int j = 0; j < 100; j++)
+                        {
+                            dbLog.Debug("debug");
+                            dbLog.Info("info");
+                            dbLog.Warn("warn");
+                            dbLog.Error("error");
+                        }
+                    });
+                }
+
+                //Wait for the worker threads to finish their business
+                Task.WaitAll(tasks);
+
+                //Block whilst messages are still being written out
+                dbLog.BlockWhileWriting();
+            }
         }
     }
 }

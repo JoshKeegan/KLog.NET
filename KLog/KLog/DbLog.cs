@@ -59,13 +59,15 @@ namespace KLog
                 {
                     currentlyInserting++;
 
+                    //TODO: handle excxeptions being thrown in the worker thread (internal logging)
+
                     //Note: this same functionality could be gottin in .NET 4.0 by spawning a new thread
                     Task<int> insertTask = command.ExecuteNonQueryAsync();
                     insertTask.ContinueWith((insertResult) =>
                     {
                         currentlyInserting--;
 
-                        if(closeConnections)
+                        if (closeConnections)
                         {
                             conn.Close();
                         }
