@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 using KLog;
@@ -137,6 +138,69 @@ namespace UnitTests
 
             log.Warn(WARNING_MESSAGE);
             Assert.IsFalse(log.Stack.Any());
+        }
+
+        #endregion
+
+        #region Test getCallingFrame
+
+        [Test]
+        public void TestGetCallingFrameCorrectMethod()
+        {
+            MethodBase expected = MethodBase.GetCurrentMethod();
+
+            StackLog log = new StackLog(LogLevel.All);
+            log.Debug("test");
+
+            LogEntry entry = log.Stack.Pop();
+
+            Assert.AreEqual(expected, entry.CallingFrame.GetMethod());
+        }
+
+        [Test]
+        public void TestGetCallingFrameCorrectMethodFromExternalLogImplementation()
+        {
+            MethodBase expected = MethodBase.GetCurrentMethod();
+
+            ExternalStackLog log = new ExternalStackLog(LogLevel.All);
+            log.Debug("test");
+
+            LogEntry entry = log.Stack.Pop();
+
+            Assert.AreEqual(expected, entry.CallingFrame.GetMethod());
+        }
+
+        [Test]
+        public void TestGetCallingFrameCorrectMethodThroughDefaultLog()
+        {
+            MethodBase expected = MethodBase.GetCurrentMethod();
+
+            StackLog log = new StackLog(LogLevel.All);
+            DefaultLog.Log = log;
+            DefaultLog.Debug("test");
+
+            LogEntry entry = log.Stack.Pop();
+
+            Assert.AreEqual(expected, entry.CallingFrame.GetMethod());
+        }
+
+        [Test]
+        public void TestGetCallingFrameCorrectTypeWhenCalledInternally()
+        {
+            Type expected = typeof(EmailLog);
+
+            //Set up the internal log
+            StackLog internalLog = new StackLog(LogLevel.All);
+            InternalLog.Log = internalLog;
+
+            //Use an EmailLog with incorrect SMTP server settings to trigger a call to the InternalLog
+            EmailLog log = new EmailLog("test@made_up.com", "josh.keegan@also_made_up.com", "smtp.made_up.com", 
+                "test", "testPassword", LogLevel.All);
+            log.Debug("test");
+
+            LogEntry entry = internalLog.Stack.Pop();
+
+            Assert.AreEqual(expected, entry.CallingFrame.GetMethod().DeclaringType);
         }
 
         #endregion

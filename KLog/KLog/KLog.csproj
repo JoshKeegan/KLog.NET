@@ -45,6 +45,7 @@
     <Compile Include="ColouredConsoleLog.cs" />
     <Compile Include="DbLog.cs" />
     <Compile Include="DbLogParameter.cs" />
+    <Compile Include="InternalLog.cs" />
     <Compile Include="LogConcurrencyWrapper.cs" />
     <Compile Include="ConcurrentColouredConsoleLog.cs" />
     <Compile Include="CompoundLog.cs" />

@@ -66,8 +66,6 @@ namespace KLog
                 //smtpClient.Send(mailMessage);
                 smtpClient.SendCompleted += (sender, eventArgs) =>
                 {
-                    //TODO: Should the EmailLog take another log to log messages to in the event of failure??
-
                     //Dispose of the SMTP Client
                     smtpClient.Dispose();
 
@@ -75,7 +73,20 @@ namespace KLog
                     currentlySending--;
                 };
                 currentlySending++;
-                smtpClient.SendAsync(mailMessage, null);
+
+                //Hide any exceptions when sending this email. Don't want to break the client application due to a logging error
+                //  Instead they will get sent to the Internal Log which should be monitored during the development of an application
+                try
+                {
+                    smtpClient.SendAsync(mailMessage, null);
+                }
+                catch(Exception e)
+                {
+                    InternalLog.Error("Error whilst sending email. Exception:\n{0}", e);
+
+                    //No longer sending message
+                    currentlySending--;
+                }
             }
         }
 
