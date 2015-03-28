@@ -8,12 +8,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 using KLog;
 using KLog.Programmatic;
 
 using NUnit.Framework;
+
 
 namespace UnitTests
 {
@@ -137,6 +139,50 @@ namespace UnitTests
 
             log.Warn(WARNING_MESSAGE);
             Assert.IsFalse(log.Stack.Any());
+        }
+
+        #endregion
+
+        #region Test getCallingFrame
+
+        [Test]
+        public void TestGetCallingFrameCorrectMethod()
+        {
+            MethodBase expected = MethodBase.GetCurrentMethod();
+
+            StackLog log = new StackLog(LogLevel.All);
+            log.Debug("test");
+
+            LogEntry entry = log.Stack.Pop();
+
+            Assert.AreEqual(expected, entry.CallingFrame.GetMethod());
+        }
+
+        [Test]
+        public void TestGetCallingFrameCorrectMethodFromExternalLogImplementation()
+        {
+            MethodBase expected = MethodBase.GetCurrentMethod();
+
+            ExternalStackLog log = new ExternalStackLog(LogLevel.All);
+            log.Debug("test");
+
+            LogEntry entry = log.Stack.Pop();
+
+            Assert.AreEqual(expected, entry.CallingFrame.GetMethod());
+        }
+
+        [Test]
+        public void TestGetCallingFrameCorrectMethodThroughDefaultLog()
+        {
+            MethodBase expected = MethodBase.GetCurrentMethod();
+
+            StackLog log = new StackLog(LogLevel.All);
+            DefaultLog.Log = log;
+            DefaultLog.Debug("test");
+
+            LogEntry entry = log.Stack.Pop();
+
+            Assert.AreEqual(expected, entry.CallingFrame.GetMethod());
         }
 
         #endregion
