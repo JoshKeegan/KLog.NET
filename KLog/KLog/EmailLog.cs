@@ -31,7 +31,7 @@ namespace KLog
         private string smtpUsername = null;
         private string smtpPassword = null;
         private string subject = "Log Message (KLog.NET)";
-        private int currentlySending = 0;
+        private volatile int currentlySending = 0;
 
         #endregion
 
@@ -70,9 +70,9 @@ namespace KLog
                     smtpClient.Dispose();
 
                     //Message sent
-                    currentlySending--;
+                    Interlocked.Decrement(ref currentlySending);
                 };
-                currentlySending++;
+                Interlocked.Increment(ref currentlySending);
 
                 //Hide any exceptions when sending this email. Don't want to break the client application due to a logging error
                 //  Instead they will get sent to the Internal Log which should be monitored during the development of an application
