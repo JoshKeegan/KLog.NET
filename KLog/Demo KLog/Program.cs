@@ -84,6 +84,7 @@ namespace Demo_KLog
             //Run the DbLog demo
             threadSafeDbLogDemo();
 
+            //Run the Internal log demo
             internalLogDemo();
 
             //Wait for anything in the default log to be written out
