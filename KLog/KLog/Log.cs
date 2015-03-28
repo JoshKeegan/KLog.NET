@@ -152,12 +152,35 @@ namespace KLog
                 {
                     Type callingType = frame.GetMethod().DeclaringType;
 
-                    //TODO: First outside of Namespace isn't good enough here, since there could be external 
-                    //  implementations of Log, or calls to Log.write from within KLog
-                    if (callingType != null && !typesInNamespace.Contains(callingType))
+                    if(callingType != null)
                     {
-                        //Found the first frame outside of this namespace
-                        return frame;
+                        //If we've hit InternalLog, the next frame outside of InternalLog (which may be inside KLog)
+                        //  is the calling StackFrame
+                        if(callingType == typeof(InternalLog))
+                        {
+                            for (; i < trace.FrameCount; i++)
+                            {
+                                frame = trace.GetFrame(i);
+
+                                if(frame != null)
+                                {
+                                    callingType = frame.GetMethod().DeclaringType;
+
+                                    if(callingType != null)
+                                    {
+                                        if(callingType != typeof(InternalLog))
+                                        {
+                                            return frame;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //Else if this calling type is outside of the KLog namespace
+                        else if(!typesInNamespace.Contains(callingType))
+                        {
+                            return frame;
+                        }
                     }
                 }
             }
