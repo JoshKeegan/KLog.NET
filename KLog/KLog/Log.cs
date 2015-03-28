@@ -152,6 +152,8 @@ namespace KLog
                 {
                     Type callingType = frame.GetMethod().DeclaringType;
 
+                    //TODO: First outside of Namespace isn't good enough here, since there could be external 
+                    //  implementations of Log, or calls to Log.write from within KLog
                     if (callingType != null && !typesInNamespace.Contains(callingType))
                     {
                         //Found the first frame outside of this namespace
