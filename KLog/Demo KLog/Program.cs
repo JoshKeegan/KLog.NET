@@ -75,6 +75,8 @@ namespace Demo_KLog
             //Run the thread-safety demo of the ColouredConsoleLog
             threadSafeColouredConsoleLogDemo();
 
+            internalLogDemo();
+
             //Wait for anything in the default log to be written out
             DefaultLog.BlockWhileWriting();
         }
@@ -105,6 +107,23 @@ namespace Demo_KLog
 
             //Block whilst messages are still being writen out
             log.BlockWhileWriting();
+        }
+
+        private static void internalLogDemo()
+        {
+            Log internalLogBefore = InternalLog.Log;
+
+            ConcurrentColouredConsoleLog internalLog = new ConcurrentColouredConsoleLog(LOG_LEVEL);
+            InternalLog.Log = internalLog;
+
+            //Use an EmailLog with incorrect SMTP server settings to trigger a call to the InternalLog
+            EmailLog log = new EmailLog("test@made_up.com", "josh.keegan@also_made_up.com", "smtp.made_up.com",
+                "test", "testPassword", LogLevel.All);
+            log.Debug("test");
+
+            //Clean up
+            InternalLog.Log = internalLogBefore;
+            internalLog.Dispose();
         }
     }
 }
