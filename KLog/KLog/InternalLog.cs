@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace KLog
@@ -37,41 +38,49 @@ namespace KLog
         }
 
         //Log level writes (should reflect what is available on a Log object)
+        [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void Error(string message)
         {
             Log.Error(message);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void Error(string message, params object[] args)
         {
             Log.Error(message, args);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void Warn(string message)
         {
             Log.Warn(message);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void Warn(string message, params object[] args)
         {
             Log.Warn(message, args);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void Info(string message)
         {
             Log.Info(message);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void Info(string message, params object[] args)
         {
             Log.Info(message, args);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void Debug(string message)
         {
             Log.Debug(message);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void Debug(string message, params object[] args)
         {
             Log.Debug(message, args);
