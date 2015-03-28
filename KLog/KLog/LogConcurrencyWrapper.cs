@@ -99,11 +99,37 @@ namespace KLog
                 //Request the cancellation
                 processingTaskCancellationTokenSource.Cancel();
 
-                //Wait for the task to finish processing
-                processingTask.Wait();
+                //Try catch since although we don't exit the Task by throwing a TaskCanceledException, it may still throw one if it isn't
+                //  in the running state (and therefore isn't cancelled by the implementation here) ~ see bug #6
+                try
+                {
+                    //Wait for the task to finish processing
+                    processingTask.Wait();
+                }
+                catch(AggregateException aggregateException)
+                {
+                    //Exclude TaskCanceledException, since this is semi-expected ~ see bug #6
+                    List<Exception> nonTaskCanceledExceptions = new List<Exception>();
 
-                //Clean up
-                processingTaskCancellationTokenSource.Dispose();
+                    foreach(Exception e in aggregateException.InnerExceptions)
+                    {
+                        if(e.GetType() != typeof(TaskCanceledException))
+                        {
+                            nonTaskCanceledExceptions.Add(e);
+                        }
+                    }
+
+                    //If there were any exceptions (after excluding TaskCanceledException), throw them
+                    if(nonTaskCanceledExceptions.Any())
+                    {
+                        throw new AggregateException(nonTaskCanceledExceptions);
+                    }
+                }
+                finally
+                {
+                    //Clean up
+                    processingTaskCancellationTokenSource.Dispose();
+                }
             }
         }
 
