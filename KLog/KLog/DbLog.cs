@@ -24,7 +24,7 @@ namespace KLog
         IEnumerable<DbLogParameter> parameters;
         private bool closeConnections;
         private bool insertAsync;
-        private int currentlyInserting = 0;
+        private volatile int currentlyInserting = 0;
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace KLog
 
                 if(insertAsync)
                 {
-                    currentlyInserting++;
+                    Interlocked.Increment(ref currentlyInserting);
 
                     //TODO: handle excxeptions being thrown in the worker thread (internal logging)
 
@@ -65,7 +65,7 @@ namespace KLog
                     Task<int> insertTask = command.ExecuteNonQueryAsync();
                     insertTask.ContinueWith((insertResult) =>
                     {
-                        currentlyInserting--;
+                        Interlocked.Decrement(ref currentlyInserting);
 
                         if (closeConnections)
                         {
