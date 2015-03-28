@@ -15,6 +15,7 @@ using KLog;
 using KLog.Programmatic;
 
 using NUnit.Framework;
+using SixPack.Reflection;
 
 
 namespace UnitTests
@@ -183,6 +184,25 @@ namespace UnitTests
             LogEntry entry = log.Stack.Pop();
 
             Assert.AreEqual(expected, entry.CallingFrame.GetMethod());
+        }
+
+        [Test]
+        public void TestGetCallingFrameCorrectTypeWhenCalledInternally()
+        {
+            Type expected = typeof(EmailLog);
+
+            //Set up the internal log
+            StackLog internalLog = new StackLog(LogLevel.All);
+            InternalLog.Log = internalLog;
+
+            //Use an EmailLog with incorrect SMTP server settings to trigger a call to the InternalLog
+            EmailLog log = new EmailLog("test@made_up.com", "josh.keegan@also_made_up.com", "smtp.made_up.com", 
+                "test", "testPassword", LogLevel.All);
+            log.Debug("test");
+
+            LogEntry entry = internalLog.Stack.Pop();
+
+            Assert.AreEqual(expected, entry.CallingFrame.GetMethod().DeclaringType);
         }
 
         #endregion
