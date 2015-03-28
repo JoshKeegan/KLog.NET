@@ -121,6 +121,8 @@ namespace Demo_KLog
                 "test", "testPassword", LogLevel.All);
             log.Debug("test");
 
+            InternalLog.Log.BlockWhileWriting();
+
             //Clean up
             InternalLog.Log = internalLogBefore;
             internalLog.Dispose();
