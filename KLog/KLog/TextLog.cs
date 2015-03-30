@@ -11,14 +11,20 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
+using KLog.Text;
+
 namespace KLog
 {
     public abstract class TextLog : Log
     {
+        //Private Variables
+        private LogEntryTextFormatter formatter;
+
+        //Implement Log
         protected override void write(LogEntry entry)
         {
             //Format this entry as a string
-            string text = buildLogEntryString(entry);
+            string text = formatter.Eval(entry);
 
             //Write the raw message
             write(text);
@@ -27,21 +33,18 @@ namespace KLog
         protected abstract void write(string message);
 
         //Constructors
-        //TODO: Text formatting options
-        public TextLog(LogLevel logLevel)
-            : base(logLevel) {  }
-
-        //Private Helpers
-        private static string buildLogEntryString(LogEntry entry)
+        public TextLog(LogLevel logLevel, LogEntryTextFormatter formatter)
+            : base(logLevel) 
         {
-            //TODO: Improve with a range of text formatting options
-            string message = String.Format("{0} - {1}: {2}: {3}",
-                entry.EventDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
-                entry.CallingFrame.GetMethod().DeclaringType.FullName,
-                entry.LogLevel,
-                entry.Message);
-
-            return message;
+            this.formatter = formatter;
         }
+
+        public TextLog(LogLevel logLevel)
+            : this(logLevel, 
+            new LogEntryTextFormatter(
+                new FEDateTime("yyyy-MM-dd HH:mm:ss"), " - ",
+                new FECallingMethodFullName(), ": ",
+                new FELogLevel(), ": ",
+                new FEMessage())) {  }
     }
 }

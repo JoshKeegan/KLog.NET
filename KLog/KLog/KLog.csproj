@@ -57,6 +57,13 @@
     <Compile Include="Programmatic\StackLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextLog.cs" />
+    <Compile Include="Text\LogEntryFormattingEntity.cs" />
+    <Compile Include="Text\LogEntryTextFormatter.cs" />
+    <Compile Include="Text\IFormattingEntity.cs" />
+    <Compile Include="Text\FECallingMethodFullName.cs" />
+    <Compile Include="Text\FELogLevel.cs" />
+    <Compile Include="Text\FEMessage.cs" />
+    <Compile Include="Text\FEDateTime.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
