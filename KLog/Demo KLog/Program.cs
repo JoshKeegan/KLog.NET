@@ -45,7 +45,7 @@ namespace Demo_KLog
 
                 if (!System.IO.File.Exists(logName))
                 {
-                    fileLog = new FileLog(logName, LOG_LEVEL);
+                    fileLog = new ConcurrentFileLog(logName, LOG_LEVEL);
 
                     break;
                 }
@@ -70,7 +70,7 @@ namespace Demo_KLog
             consoleLog.Info("Test just console log");
             fileLog.Info("Test just file log");
 
-            DefaultLog.Info("Waiting for Log Emails to be sent before application shutdown . . .");
+            DefaultLog.Info("Waiting for all Logs to finish writing . . .");
 
             //Run the thread-safety demo of the ColouredConsoleLog
             threadSafeColouredConsoleLogDemo();
