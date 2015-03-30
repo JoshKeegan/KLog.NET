@@ -36,9 +36,9 @@ namespace KLog
         {
             //TODO: Improve with a range of text formatting options
             string message = String.Format("{0} - {1}: {2}: {3}",
-                entry.LogLevel,
                 entry.EventDate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
                 entry.CallingFrame.GetMethod().DeclaringType.FullName,
+                entry.LogLevel,
                 entry.Message);
 
             return message;

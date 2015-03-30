@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColouredConsoleLog.cs" />
+    <Compile Include="ConcurrentFileLog.cs" />
     <Compile Include="DbLog.cs" />
     <Compile Include="DbLogParameter.cs" />
     <Compile Include="InternalLog.cs" />
