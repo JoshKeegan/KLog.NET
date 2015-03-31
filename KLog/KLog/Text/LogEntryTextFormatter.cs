@@ -50,7 +50,7 @@ namespace KLog.Text
                 if(o is LogEntryFormattingEntity)
                 {
                     LogEntryFormattingEntity e = (LogEntryFormattingEntity)o;
-                    builder.Append(e.GetLogText(entry));
+                    builder.Append(e.Eval(entry));
                 }
                 //Otherwise this is some other type, convert it to a string
                 else

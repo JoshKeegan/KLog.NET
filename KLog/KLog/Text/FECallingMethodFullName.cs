@@ -15,7 +15,7 @@ namespace KLog.Text
 {
     public class FECallingMethodFullName : LogEntryFormattingEntity
     {
-        public override string GetLogText(LogEntry entry)
+        public override string Eval(LogEntry entry)
         {
             return entry.CallingFrame.GetMethod().DeclaringType.FullName;
         }

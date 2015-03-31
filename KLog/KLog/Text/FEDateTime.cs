@@ -26,12 +26,12 @@ namespace KLog.Text
         }
 
         //Public Methods
-        public string GetLogText()
+        public string Eval()
         {
             return getLogText(DateTime.Now);
         }
 
-        public override string GetLogText(LogEntry entry)
+        public override string Eval(LogEntry entry)
         {
             return getLogText(entry.EventDate);
         }
