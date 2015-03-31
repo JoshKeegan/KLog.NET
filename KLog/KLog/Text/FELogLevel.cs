@@ -14,7 +14,7 @@ namespace KLog.Text
 {
     public class FELogLevel : LogEntryFormattingEntity
     {
-        public override string Eval(LogEntry entry)
+        public override object Eval(LogEntry entry)
         {
             return entry.LogLevel.ToString();
         }

@@ -1,10 +1,9 @@
 ﻿/*
- * KLog.NET
- * FEDateTime - Formatting Entity that gets a DateTime as a string
- *  Can be either DateTime.Now or the DateTime from a LogEntry, depending
- *  on the context in which it's used
+ * KLog.NET - Formatting Entity that gets a DateTime
+ *  Can be either DateTime.Now or the DateTime from a LogEntry,
+ *  depending on the context in which it's used
  * Authors:
- *  Josh Keegan 30/03/2015
+ *  Josh Keegan 31/03/2015
  */
 
 using System;
@@ -16,30 +15,15 @@ namespace KLog.Text
 {
     public class FEDateTime : LogEntryFormattingEntity, IFormattingEntity
     {
-        //Private variables
-        private string formatter;
-
-        //Constructors
-        public FEDateTime(string formatter)
-        {
-            this.formatter = formatter;
-        }
-
         //Public Methods
-        public string Eval()
+        public override object Eval(LogEntry entry)
         {
-            return getLogText(DateTime.Now);
+            return entry.EventDate;
         }
 
-        public override string Eval(LogEntry entry)
+        public object Eval()
         {
-            return getLogText(entry.EventDate);
-        }
-
-        //Private methods
-        private string getLogText(DateTime dateTime)
-        {
-            return dateTime.ToString(formatter);
+            return DateTime.Now;
         }
     }
 }

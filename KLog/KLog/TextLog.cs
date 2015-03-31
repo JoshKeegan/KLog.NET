@@ -42,7 +42,7 @@ namespace KLog
         public TextLog(LogLevel logLevel)
             : this(logLevel, 
             new LogEntryTextFormatter(
-                new FEDateTime("yyyy-MM-dd HH:mm:ss"), " - ",
+                new FEStringDateTime("yyyy-MM-dd HH:mm:ss"), " - ",
                 new FECallingMethodFullName(), ": ",
                 new FELogLevel(), ": ",
                 new FEMessage())) {  }

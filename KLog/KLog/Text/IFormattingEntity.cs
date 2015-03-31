@@ -15,6 +15,6 @@ namespace KLog.Text
 {
     public interface IFormattingEntity
     {
-        string Eval();
+        object Eval();
     }
 }

@@ -15,6 +15,6 @@ namespace KLog.Text
 {
     public abstract class LogEntryFormattingEntity
     {
-        public abstract string Eval(LogEntry entry);
+        public abstract object Eval(LogEntry entry);
     }
 }
