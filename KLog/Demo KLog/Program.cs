@@ -141,7 +141,6 @@ namespace Demo_KLog
                 new DbLogParameter(":eventDate", new FEDateTime())
             };
 
-            //TODO: Async needs some work with exception logging & the BlockWhileWriting() mechanism. So it's diabled here for now
             using(DbLog dbLog = new DbLog(LOG_LEVEL, getDbConnection, getDbCommand, parameters, true, true))
             {
                 //Now the log's been made, lets abuse it
