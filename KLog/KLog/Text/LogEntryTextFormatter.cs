@@ -46,34 +46,10 @@ namespace KLog.Text
 
             foreach(object o in format)
             {
-                builder.Append(evalObjectAsString(o, entry));
+                builder.Append(FormattingEntityEvaluator.Eval(o, entry));
             }
 
             return builder.ToString();
-        }
-
-        //Internal Helpers
-        internal static string evalObjectAsString(object o, LogEntry entry)
-        {
-            //If this is already a string, return it
-            if(o.GetType() == typeof(string))
-            {
-                return (string)o;
-            }
-            //Else If this is a formatter entity, evaluate it
-            else if(o is LogEntryFormattingEntity)
-            {
-                LogEntryFormattingEntity e = (LogEntryFormattingEntity)o;
-                object evaluated = e.Eval(entry);
-
-                //Allow for Formatting Entity Chaining
-                return evalObjectAsString(evaluated, entry);
-            }
-            //Otherwise this is some other type, convert it to a string
-            else
-            {
-                return o.ToString();
-            }
         }
     }
 }

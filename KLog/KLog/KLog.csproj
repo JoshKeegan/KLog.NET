@@ -64,6 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextLog.cs" />
     <Compile Include="Text\FEDateTime.cs" />
+    <Compile Include="Text\FormattingEntityEvaluator.cs" />
     <Compile Include="Text\LogEntryFormattingEntity.cs" />
     <Compile Include="Text\LogEntryTextFormatter.cs" />
     <Compile Include="Text\IFormattingEntity.cs" />

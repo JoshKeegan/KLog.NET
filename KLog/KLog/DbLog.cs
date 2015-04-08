@@ -71,7 +71,7 @@ namespace KLog
                         Interlocked.Decrement(ref currentlyInserting);
 #pragma warning restore 420
 
-                        if (closeConnections)
+                        if (closeConnections && conn.State != ConnectionState.Closed)
                         {
                             conn.Close();
                         }

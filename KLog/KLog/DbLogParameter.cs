@@ -30,8 +30,8 @@ namespace KLog
         //Public Methods
         public object EvalValue(LogEntry entry)
         {
-            //Evaluate Value with the text formatter
-            return LogEntryTextFormatter.evalObjectAsString(Value, entry);
+            //Evaluate Value with the FE Evaluator
+            return FormattingEntityEvaluator.Eval(Value, entry);
         }
     }
 }
