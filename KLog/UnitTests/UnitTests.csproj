@@ -51,6 +51,7 @@
     <Compile Include="EvaluatableObject.cs" />
     <Compile Include="ExternalStackLog.cs" />
     <Compile Include="LogConcurrencyWrapperTests.cs" />
+    <Compile Include="LogRateLimiterTests.cs" />
     <Compile Include="LogTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
