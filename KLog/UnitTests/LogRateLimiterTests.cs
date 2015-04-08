@@ -22,7 +22,7 @@ namespace UnitTests
     public class LogRateLimiterTests
     {
         //Constants
-        private const int WAIT_MS = 10;
+        private const int WAIT_MS = 999;
 
         [Test]
         public void TestWrite()
