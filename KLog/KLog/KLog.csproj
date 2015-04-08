@@ -53,6 +53,7 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="Helpers\ReflectionHelpers.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="LogRateLimiter.cs" />
     <Compile Include="NullLog.cs" />
     <Compile Include="Programmatic\StackLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
