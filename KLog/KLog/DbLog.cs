@@ -57,7 +57,9 @@ namespace KLog
 
                 if(insertAsync)
                 {
+#pragma warning disable 420
                     Interlocked.Increment(ref currentlyInserting);
+#pragma warning restore 420
 
                     //TODO: handle excxeptions being thrown in the worker thread (internal logging)
 
@@ -65,7 +67,9 @@ namespace KLog
                     Task<int> insertTask = command.ExecuteNonQueryAsync();
                     insertTask.ContinueWith((insertResult) =>
                     {
+#pragma warning disable 420
                         Interlocked.Decrement(ref currentlyInserting);
+#pragma warning restore 420
 
                         if (closeConnections)
                         {

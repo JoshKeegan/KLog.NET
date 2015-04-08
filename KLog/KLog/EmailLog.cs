@@ -70,9 +70,13 @@ namespace KLog
                     smtpClient.Dispose();
 
                     //Message sent
+#pragma warning disable 420
                     Interlocked.Decrement(ref currentlySending);
+#pragma warning restore 420
                 };
+#pragma warning disable 420
                 Interlocked.Increment(ref currentlySending);
+#pragma warning restore 420
 
                 //Hide any exceptions when sending this email. Don't want to break the client application due to a logging error
                 //  Instead they will get sent to the Internal Log which should be monitored during the development of an application
