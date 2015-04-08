@@ -52,8 +52,8 @@ namespace KLog.Text
             return builder.ToString();
         }
 
-        //Private Helpers
-        private static string evalObjectAsString(object o, LogEntry entry)
+        //Internal Helpers
+        internal static string evalObjectAsString(object o, LogEntry entry)
         {
             //If this is already a string, return it
             if(o.GetType() == typeof(string))

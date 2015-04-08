@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using KLog;
+using KLog.Text;
 
 using Npgsql;
 
@@ -128,12 +129,16 @@ namespace Demo_KLog
             });
             DbLog.GetDbCommand getDbCommand = ((conn) =>
             {
-                return new NpgsqlCommand("INSERT INTO demo (\"fieldA\", \"fieldB\") VALUES (:fieldA, :fieldB)", (NpgsqlConnection)conn);
+                return new NpgsqlCommand("INSERT INTO demo (\"message\", \"logLevel\", \"callingMethodFullName\", \"eventDate\") " +
+                    "VALUES (:message, :logLevel, :callingMethodFullName, :eventDate)", 
+                    (NpgsqlConnection)conn);
             });
             DbLogParameter[] parameters = new DbLogParameter[]
             {
-                new DbLogParameter(":fieldA", "valA"),
-                new DbLogParameter(":fieldB", "valB")
+                new DbLogParameter(":message", new FEMessage()),
+                new DbLogParameter(":logLevel", new FELogLevel()),
+                new DbLogParameter(":callingMethodFullName", new FECallingMethodFullName()),
+                new DbLogParameter(":eventDate", new FEDateTime())
             };
 
             //TODO: Async needs some work with exception logging & the BlockWhileWriting() mechanism. So it's diabled here for now

@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using KLog.Text;
+
 namespace KLog
 {
     public class DbLogParameter
@@ -28,8 +30,8 @@ namespace KLog
         //Public Methods
         public object EvalValue(LogEntry entry)
         {
-            //TODO: if Value is a string, evaluate it with the text formatter (once implemented)
-            return Value;
+            //Evaluate Value with the text formatter
+            return LogEntryTextFormatter.evalObjectAsString(Value, entry);
         }
     }
 }

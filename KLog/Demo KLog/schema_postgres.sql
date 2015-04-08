@@ -4,9 +4,11 @@
 
 CREATE TABLE demo
 (
-  "fieldA" text,
-  "fieldB" text,
   id bigserial NOT NULL,
+  message text NOT NULL,
+  "logLevel" text NOT NULL,
+  "callingMethodFullName" text NOT NULL,
+  "eventDate" time with time zone NOT NULL,
   CONSTRAINT "PK_demo" PRIMARY KEY (id)
 )
 WITH (
