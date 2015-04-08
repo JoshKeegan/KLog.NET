@@ -21,6 +21,9 @@ namespace UnitTests
     [TestFixture]
     public class LogRateLimiterTests
     {
+        //Constants
+        private const int WAIT_MS = 10;
+
         [Test]
         public void TestWrite()
         {
@@ -54,12 +57,12 @@ namespace UnitTests
         {
             //Set rate limit to re1 message per 10ms
             StackLog log = new StackLog(KLog.LogLevel.All);
-            LogRateLimiter<StackLog> rateLimiter = new LogRateLimiter<StackLog>(log, new TimeSpan(0, 0, 0, 0, 5), 1,
+            LogRateLimiter<StackLog> rateLimiter = new LogRateLimiter<StackLog>(log, new TimeSpan(0, 0, 0, 0, WAIT_MS), 1,
                 (entry) => { }, (entry) => { });
 
             rateLimiter.Debug("1");
             rateLimiter.Debug("2");
-            Thread.Sleep(5);
+            Thread.Sleep(WAIT_MS);
             rateLimiter.Debug("3");
 
             //Only 3 & 1 should have been logged
@@ -93,7 +96,7 @@ namespace UnitTests
             StackLog log = new StackLog(KLog.LogLevel.All);
             string exceededOn = null;
             string exitedOn = null;
-            LogRateLimiter<StackLog> rateLimiter = new LogRateLimiter<StackLog>(log, new TimeSpan(0, 0, 0, 0, 5), 1,
+            LogRateLimiter<StackLog> rateLimiter = new LogRateLimiter<StackLog>(log, new TimeSpan(0, 0, 0, 0, WAIT_MS), 1,
                 (entry) =>
                 {
                     exceededOn = entry.Message;
@@ -107,7 +110,7 @@ namespace UnitTests
             rateLimiter.Debug("too much");
             rateLimiter.Debug("ignore me");
 
-            Thread.Sleep(5);
+            Thread.Sleep(WAIT_MS);
             rateLimiter.Debug("back in the game");
 
             Assert.AreEqual("back in the game", log.Stack.Pop().Message);
