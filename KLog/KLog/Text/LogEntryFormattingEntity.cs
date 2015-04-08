@@ -1,7 +1,7 @@
 ﻿/*
  * KLog.NET
  * LogEntryFormattingEntity - abstract class defining how a class that formats some entity
- *  of a log entry as a string should be defined
+ *  of a log entry should be defined
  * Authors:
  *  Josh Keegan 30/03/2015
  */
