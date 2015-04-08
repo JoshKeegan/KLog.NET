@@ -142,7 +142,7 @@ namespace Demo_KLog
             };
 
             //TODO: Async needs some work with exception logging & the BlockWhileWriting() mechanism. So it's diabled here for now
-            using(DbLog dbLog = new DbLog(LOG_LEVEL, getDbConnection, getDbCommand, parameters, true, false))
+            using(DbLog dbLog = new DbLog(LOG_LEVEL, getDbConnection, getDbCommand, parameters, true, true))
             {
                 //Now the log's been made, lets abuse it
                 Task[] tasks = new Task[10];

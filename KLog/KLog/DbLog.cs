@@ -71,6 +71,20 @@ namespace KLog
                         {
                             conn.Close();
                         }
+
+                        //If this task failed to complete due to an unhandled exception
+                        if(insertResult.IsFaulted)
+                        {
+                            Exception e = insertResult.Exception;
+
+                            //Get the inner exception if there is one (should be Aggregate)
+                            if(e != null & e.InnerException != null)
+                            {
+                                e = e.InnerException;
+                            }
+
+                            InternalLog.Error("Error whilst performing Async DB Insert. Exception:\n{0}", e);
+                        }
                     });
                 }
                 else
