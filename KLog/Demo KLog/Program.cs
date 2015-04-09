@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -122,7 +123,11 @@ namespace Demo_KLog
 
         private static void threadSafeDbLogDemo()
         {
-            DbLog.GetDbConnection getDbConnection = (() =>
+            /*
+             * PostgreSQL
+             */
+
+            /*DbLog.GetDbConnection getDbConnection = (() =>
             {
                 //Have had to disable connection pooling, since it seems Npgsql implements this with a normal dictionary (which isn't thread-safe)
                 return new NpgsqlConnection("Server=127.0.0.1;Port=5432;User Id=klogDemoUser;Password=wow_much_security;Database=KLog;Pooling=false");
@@ -139,9 +144,35 @@ namespace Demo_KLog
                 new DbLogParameter(":logLevel", new FELogLevel()),
                 new DbLogParameter(":callingMethodFullName", new FECallingMethodFullName()),
                 new DbLogParameter(":eventDate", new FEDateTime())
+            };*/
+
+            /*
+             * MS SQL
+             */
+
+            DbLog.GetDbConnection getDbConnection = (() =>
+            {
+                return new SqlConnection("Server=127.0.0.1; Database=KLog; User ID=klogDemoUser; pwd=wow_much_security");
+            });
+            DbLog.GetDbCommand getDbCommand = ((conn) =>
+            {
+                return new SqlCommand("INSERT INTO demo (message, logLevel, callingMethodFullName, eventDate) " +
+                    "VALUES (@message, @logLevel, @callingMethodFullName, @eventDate)",
+                    (SqlConnection)conn);
+            });
+            DbLogParameter[] parameters = new DbLogParameter[]
+            {
+                new DbLogParameter("@message", new FEMessage()),
+                new DbLogParameter("@logLevel", new FELogLevel()),
+                new DbLogParameter("@callingMethodFullName", new FECallingMethodFullName()),
+                new DbLogParameter("@eventDate", new FEDateTime())
             };
 
-            using(DbLog dbLog = new DbLog(LOG_LEVEL, getDbConnection, getDbCommand, parameters, true, true))
+            //MS SQL Notes:
+            //async doesn't currently work when not running in the debugger (doesn't insert all entries).
+            //also async is *much* slower for this rather extreme case
+
+            using(DbLog dbLog = new DbLog(LOG_LEVEL, getDbConnection, getDbCommand, parameters, true, false))
             {
                 //Now the log's been made, lets abuse it
                 Task[] tasks = new Task[10];
