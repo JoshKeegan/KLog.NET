@@ -28,8 +28,8 @@ namespace KLog
             //thread safety
             lock (logLock)
             {
-                this.logWriter.WriteLine(message);
-                this.logWriter.Flush(); //Flush after writes to guard log content against program crash
+                logWriter.WriteLine(message);
+                logWriter.Flush(); //Flush after writes to guard log content against program crash
             }
         }
 
@@ -38,20 +38,20 @@ namespace KLog
             : base(logLevel)
         {
             this.filePath = filePath;
-            this.logWriter = new StreamWriter(filePath);
-            this.logLock = new object();
+            logWriter = new StreamWriter(filePath);
+            logLock = new object();
         }
 
         //Implement IDisposable
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         ~FileLog()
         {
-            this.Dispose(false);
+            Dispose(false);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -59,7 +59,7 @@ namespace KLog
             //Called Dispose(): Free managed resources
             if (disposing)
             {
-                this.logWriter.Close();
+                logWriter.Close();
             }
 
             //Dispose or finaliser, free any native resources

@@ -28,10 +28,10 @@ namespace KLog
 
         public LogEntry(string message, LogLevel logLevel, StackFrame callingFrame, DateTime eventDate)
         {
-            this.Message = message;
-            this.LogLevel = logLevel;
-            this.CallingFrame = callingFrame;
-            this.EventDate = eventDate;
+            Message = message;
+            LogLevel = logLevel;
+            CallingFrame = callingFrame;
+            EventDate = eventDate;
         }
 
         #endregion

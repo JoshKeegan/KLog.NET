@@ -119,9 +119,9 @@ namespace KLog
             {
                 throw new ArgumentNullException("onExitRateLimit");
             }
-            this.underlyingLog = log;
+            underlyingLog = log;
 
-            this.logTimes = new Queue<DateTime>();
+            logTimes = new Queue<DateTime>();
             this.timeSpan = timeSpan;
             this.numEntries = numEntries;
             this.onEnterRateLimit = onEnterRateLimit;
@@ -140,12 +140,12 @@ namespace KLog
 
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
         }
 
         ~LogRateLimiter()
         {
-            this.Dispose(false);
+            Dispose(false);
         }
 
         protected virtual void Dispose(bool disposing)

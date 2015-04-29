@@ -26,12 +26,12 @@ namespace UnitTests
         //Implement IDisposable
         public void Dispose()
         {
-            this.Disposed = true;
+            Disposed = true;
         }
 
         ~DisposableLog()
         {
-            this.Finalized = true;
+            Finalized = true;
         }
 
         //Constructors

@@ -23,8 +23,8 @@ namespace KLog
         //Constructors
         public DbLogParameter(string name, object value)
         {
-            this.Name = name;
-            this.Value = value;
+            Name = name;
+            Value = value;
         }
 
         //Public Methods

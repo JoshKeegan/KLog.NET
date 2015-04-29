@@ -151,12 +151,12 @@ namespace KLog
 
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
         }
 
         ~DbLog()
         {
-            this.Dispose(false);
+            Dispose(false);
         }
 
         protected virtual void Dispose(bool disposing)

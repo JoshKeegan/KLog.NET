@@ -27,7 +27,7 @@ namespace UnitTests
         [Test]
         public void TestWrite()
         {
-            StackLog log = new StackLog(KLog.LogLevel.All);
+            StackLog log = new StackLog(LogLevel.All);
             LogRateLimiter<StackLog> rateLimiter = new LogRateLimiter<StackLog>(log, new TimeSpan(1, 0, 0), 100, 
                 (entry) => { }, (entry) => { });
 
@@ -40,7 +40,7 @@ namespace UnitTests
         public void TestExceedRateLimitDoesntWrite()
         {
             //Write 110 entries with a limit of 100. Check that the last one written is #100
-            StackLog log = new StackLog(KLog.LogLevel.All);
+            StackLog log = new StackLog(LogLevel.All);
             LogRateLimiter<StackLog> rateLimiter = new LogRateLimiter<StackLog>(log, new TimeSpan(1, 0, 0), 100,
                 (entry) => { }, (entry) => { });
 
@@ -56,7 +56,7 @@ namespace UnitTests
         public void TestExceedRateLimitAndThenWait()
         {
             //Set rate limit to re1 message per 10ms
-            StackLog log = new StackLog(KLog.LogLevel.All);
+            StackLog log = new StackLog(LogLevel.All);
             LogRateLimiter<StackLog> rateLimiter = new LogRateLimiter<StackLog>(log, new TimeSpan(0, 0, 0, 0, WAIT_MS), 1,
                 (entry) => { }, (entry) => { });
 
@@ -74,7 +74,7 @@ namespace UnitTests
         public void TestExceedRateLimitRunsHandler()
         {
             //Set rate limit to re1 message per 10ms
-            StackLog log = new StackLog(KLog.LogLevel.All);
+            StackLog log = new StackLog(LogLevel.All);
             string exceededOn = null;
             LogRateLimiter<StackLog> rateLimiter = new LogRateLimiter<StackLog>(log, new TimeSpan(1, 0, 0), 1,
                 (entry) => 
@@ -93,7 +93,7 @@ namespace UnitTests
         public void TestEnterExitRateLimitRunsHandler()
         {
             //Set rate limit to re1 message per 10ms
-            StackLog log = new StackLog(KLog.LogLevel.All);
+            StackLog log = new StackLog(LogLevel.All);
             string exceededOn = null;
             string exitedOn = null;
             LogRateLimiter<StackLog> rateLimiter = new LogRateLimiter<StackLog>(log, new TimeSpan(0, 0, 0, 0, WAIT_MS), 1,

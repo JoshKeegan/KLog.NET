@@ -18,12 +18,12 @@ namespace UnitTests
 
         public EvaluatableObject()
         {
-            this.Evaluated = false;
+            Evaluated = false;
         }
 
         public override string ToString()
         {
-            this.Evaluated = true;
+            Evaluated = true;
             return "A wild Evaluatable Object appeared!";
         }
     }

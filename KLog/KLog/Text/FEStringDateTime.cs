@@ -23,7 +23,7 @@ namespace KLog.Text
         public FEStringDateTime(string formatter)
         {
             this.formatter = formatter;
-            this.feDateTime = new FEDateTime();
+            feDateTime = new FEDateTime();
         }
 
         //Public Methods

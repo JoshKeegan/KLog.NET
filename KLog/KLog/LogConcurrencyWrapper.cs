@@ -51,7 +51,7 @@ namespace KLog
                 throw new ArgumentNullException("log");
             }
 
-            this.underlyingLog = log;
+            underlyingLog = log;
 
             //Set up the processing
             processingTaskCancellationTokenSource = new CancellationTokenSource();
@@ -139,12 +139,12 @@ namespace KLog
 
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
         }
 
         ~LogConcurrencyWrapper()
         {
-            this.Dispose(false);
+            Dispose(false);
         }
 
         protected virtual void Dispose(bool disposing)
