@@ -85,16 +85,13 @@ namespace KLog
         #region Constructors
 
         public ColouredConsoleLog(LogLevel logLevel, Dictionary<LogLevel, ConsoleColor> foregroundColours,
-            Dictionary<LogLevel, ConsoleColor> backgroundColours)
+            Dictionary<LogLevel, ConsoleColor> backgroundColours = DEFAULT_BACKGROUND_COLOURS)
             : base(logLevel)
         {
             //Normalise the specified colours (to include a value for each of the Log Levels)
             this.foregroundColours = normaliseLogLevelColours(foregroundColours, DEFAULT_FOREGROUND_COLOURS);
             this.backgroundColours = normaliseLogLevelColours(backgroundColours, DEFAULT_BACKGROUND_COLOURS_FILLING_IN);
         }
-
-        public ColouredConsoleLog(LogLevel logLevel, Dictionary<LogLevel, ConsoleColor> foregroundColours)
-            : this(logLevel, foregroundColours, DEFAULT_BACKGROUND_COLOURS) { }
 
         public ColouredConsoleLog(LogLevel logLevel)
             : this(logLevel, DEFAULT_FOREGROUND_COLOURS) { }
