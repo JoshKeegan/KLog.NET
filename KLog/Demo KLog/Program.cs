@@ -19,13 +19,13 @@ using Npgsql;
 
 namespace Demo_KLog
 {
-    class Program
+    static class Program
     {
         //Constants
         private const string LOGS_DIR = "logs";
         private const KLog.LogLevel LOG_LEVEL = KLog.LogLevel.All;
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             //Initialise Console Logging
             Log consoleLog = new ConcurrentColouredConsoleLog(LOG_LEVEL);
