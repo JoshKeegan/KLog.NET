@@ -150,16 +150,11 @@ namespace Demo_KLog
              * MS SQL
              */
 
-            DbLog.GetDbConnection getDbConnection = (() =>
-            {
-                return new SqlConnection("Server=127.0.0.1; Database=KLog; User ID=klogDemoUser; pwd=wow_much_security");
-            });
-            DbLog.GetDbCommand getDbCommand = ((conn) =>
-            {
-                return new SqlCommand("INSERT INTO demo (message, logLevel, callingMethodFullName, eventDate) " +
-                    "VALUES (@message, @logLevel, @callingMethodFullName, @eventDate)",
-                    (SqlConnection)conn);
-            });
+            DbLog.GetDbConnection getDbConnection = (() => new SqlConnection("Server=127.0.0.1; Database=KLog; User ID=klogDemoUser; pwd=wow_much_security"));
+            DbLog.GetDbCommand getDbCommand = (conn => 
+                new SqlCommand("INSERT INTO demo (message, logLevel, callingMethodFullName, eventDate) " +
+                "VALUES (@message, @logLevel, @callingMethodFullName, @eventDate)",
+                (SqlConnection)conn));
             DbLogParameter[] parameters = new DbLogParameter[]
             {
                 new DbLogParameter("@message", new FEMessage()),
