@@ -106,14 +106,9 @@ namespace KLog
             //null is valid (as it represents no change to the consoles existing colour)
             if (logLevelColours != null)
             {
-                List<LogLevel> toAdd = new List<LogLevel>();
-                foreach (LogLevel logLevel in REQUIRED_LOG_LEVELS)
-                {
-                    if (!logLevelColours.ContainsKey(logLevel))
-                    {
-                        toAdd.Add(logLevel);
-                    }
-                }
+                //Get which colours aren't in logLevelColours, but are in REQUIRED_LOG_LEVELS
+                IEnumerable<LogLevel> toAdd = REQUIRED_LOG_LEVELS.Where(
+                    logLevel => !logLevelColours.ContainsKey(logLevel));
 
                 foreach (LogLevel logLevel in toAdd)
                 {
