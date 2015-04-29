@@ -46,8 +46,8 @@ namespace KLog
 
         #region Private Variables
 
-        private Dictionary<LogLevel, ConsoleColor> foregroundColours;
-        private Dictionary<LogLevel, ConsoleColor> backgroundColours;
+        private readonly Dictionary<LogLevel, ConsoleColor> foregroundColours;
+        private readonly Dictionary<LogLevel, ConsoleColor> backgroundColours;
 
         #endregion
 
