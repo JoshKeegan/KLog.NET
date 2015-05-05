@@ -16,7 +16,7 @@ namespace KLog
     public class CompoundLog : Log
     {
         //Private variables
-        private IEnumerable<Log> logs = null;
+        private readonly Log[] logs = null;
 
         //Log Implementation
         protected override void write(LogEntry entry)
@@ -44,15 +44,17 @@ namespace KLog
             {
                 throw new ArgumentNullException("logs");
             }
-            foreach(Log log in logs)
+            
+            //Optimisation: use an array for logs
+            this.logs = logs.ToArray();
+
+            foreach(Log log in this.logs)
             {
                 if(log == null)
                 {
                     throw new ArgumentException("logs cannot contain null");
                 }
             }
-
-            this.logs = logs;
         }
 
         public CompoundLog(params Log[] args)
