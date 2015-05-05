@@ -43,12 +43,12 @@ namespace KLog
         }
 
         //Public Variables
-        public LogLevel logLevel { get; protected set; }
+        public LogLevel LogLevel { get; protected set; }
 
         //Constructors
         public Log(LogLevel logLevel)
         {
-            this.logLevel = logLevel;
+            this.LogLevel = logLevel;
         }
 
         //Public Methods
@@ -129,7 +129,7 @@ namespace KLog
         private bool mayWriteLevel(LogLevel logLevel)
         {
             //Use bitwise AND for checking specific rights
-            return (this.logLevel & logLevel) == logLevel;
+            return (this.LogLevel & logLevel) == logLevel;
         }
 
         protected abstract void write(LogEntry entry);

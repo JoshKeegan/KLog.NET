@@ -96,7 +96,7 @@ namespace KLog
 
         public LogRateLimiter(T log, TimeSpan timeSpan, int numEntries,
             HandleEnterExitRateLimit onEnterRateLimit, HandleEnterExitRateLimit onExitRateLimit)
-            : base(log.logLevel)
+            : base(log.LogLevel)
         {
             //Validation
             if(log == null)

@@ -43,7 +43,7 @@ namespace KLog
         #region Contructors
 
         public LogConcurrencyWrapper(T log)
-            : base(log.logLevel)
+            : base(log.LogLevel)
         {
             //Validation
             if(log == null)
