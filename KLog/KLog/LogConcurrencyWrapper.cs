@@ -20,12 +20,12 @@ namespace KLog
     {
         #region Private Variables
 
-        private Log underlyingLog;
+        private readonly Log underlyingLog;
 
         private bool processing = true;
-        private ConcurrentQueue<LogEntry> processingQueue = new ConcurrentQueue<LogEntry>();
-        private Task processingTask;
-        private CancellationTokenSource processingTaskCancellationTokenSource;
+        private readonly ConcurrentQueue<LogEntry> processingQueue = new ConcurrentQueue<LogEntry>();
+        private readonly Task processingTask;
+        private readonly CancellationTokenSource processingTaskCancellationTokenSource;
 
         #endregion
 

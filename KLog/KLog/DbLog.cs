@@ -19,11 +19,11 @@ namespace KLog
     {
         #region Private Variables
 
-        private GetDbConnection getDbConnection;
-        private GetDbCommand getDbCommand;
-        IEnumerable<DbLogParameter> parameters;
-        private bool closeConnections;
-        private bool insertAsync;
+        private readonly GetDbConnection getDbConnection;
+        private readonly GetDbCommand getDbCommand;
+        private readonly IEnumerable<DbLogParameter> parameters;
+        private readonly bool closeConnections;
+        private readonly bool insertAsync;
         private volatile int currentlyInserting = 0;
 
         #endregion

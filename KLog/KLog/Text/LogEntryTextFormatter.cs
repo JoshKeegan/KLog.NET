@@ -15,7 +15,7 @@ namespace KLog.Text
     public class LogEntryTextFormatter
     {
         //Private Variables
-        private object[] format;
+        private readonly object[] format;
 
         //Constructor
         public LogEntryTextFormatter(params object[] format)

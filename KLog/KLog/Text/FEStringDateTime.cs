@@ -16,8 +16,8 @@ namespace KLog.Text
     public class FEStringDateTime : LogEntryFormattingEntity, IFormattingEntity
     {
         //Private variables
-        private string formatter;
-        private FEDateTime feDateTime;
+        private readonly string formatter;
+        private readonly FEDateTime feDateTime;
 
         //Constructors
         public FEStringDateTime(string formatter)

@@ -19,17 +19,17 @@ namespace KLog
     {
         #region Private Variables
 
-        private T underlyingLog;
+        private readonly T underlyingLog;
 
         //TODO: Could alter queue to be lock-free and fixed length (combination of MS ConcurrentQueue & PiSearch FixedLengthQueue)
         //  if ever requiure that level of performance
-        private Queue<DateTime> logTimes;
-        private object logTimesLock = new object();
-        private TimeSpan timeSpan;
-        private int numEntries;
+        private readonly Queue<DateTime> logTimes;
+        private readonly object logTimesLock = new object();
+        private readonly TimeSpan timeSpan;
+        private readonly int numEntries;
         private bool inRateLimit = false;
-        private HandleEnterExitRateLimit onEnterRateLimit;
-        private HandleEnterExitRateLimit onExitRateLimit;
+        private readonly HandleEnterExitRateLimit onEnterRateLimit;
+        private readonly HandleEnterExitRateLimit onExitRateLimit;
 
         #endregion
 

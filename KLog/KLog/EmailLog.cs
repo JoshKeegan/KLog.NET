@@ -24,13 +24,13 @@ namespace KLog
     {
         #region Private Variables
 
-        private string fromAddress;
-        private string[] toAddresses;
-        private string smtpServerHostname;
-        private int? smtpServerPort = null;
-        private string smtpUsername = null;
-        private string smtpPassword = null;
-        private string subject = "Log Message (KLog.NET)";
+        private readonly string fromAddress;
+        private readonly string[] toAddresses;
+        private readonly string smtpServerHostname;
+        private readonly int? smtpServerPort = null;
+        private readonly string smtpUsername = null;
+        private readonly string smtpPassword = null;
+        private readonly string subject = "Log Message (KLog.NET)";
         private volatile int currentlySending = 0;
 
         #endregion

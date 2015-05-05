@@ -18,7 +18,7 @@ namespace KLog
     public abstract class TextLog : Log
     {
         //Private Variables
-        private LogEntryTextFormatter formatter;
+        private readonly LogEntryTextFormatter formatter;
 
         //Implement Log
         protected override void write(LogEntry entry)
