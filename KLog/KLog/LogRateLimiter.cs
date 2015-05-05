@@ -109,7 +109,7 @@ namespace KLog
             }
             if(numEntries < 0)
             {
-                throw new ArgumentOutOfRangeException("numEntries must be >= 0");
+                throw new ArgumentOutOfRangeException("numEntries", "numEntries must be >= 0");
             }
             if(onEnterRateLimit == null)
             {

@@ -137,7 +137,7 @@ namespace KLog
                 int port = smtpServerPort.GetValueOrDefault();
                 if(port <= 0 || port > 65535)
                 {
-                    throw new ArgumentOutOfRangeException("smtpServerPort must be null or in the range 1-65,535 (inclusive)");
+                    throw new ArgumentOutOfRangeException("smtpServerPort", "smtpServerPort must be null or in the range 1-65,535 (inclusive)");
                 }
             }
 
