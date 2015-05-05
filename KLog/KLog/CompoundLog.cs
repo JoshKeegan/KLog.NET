@@ -48,12 +48,9 @@ namespace KLog
             //Optimisation: use an array for logs
             this.logs = logs.ToArray();
 
-            foreach(Log log in this.logs)
+            if (this.logs.Any(log => log == null))
             {
-                if(log == null)
-                {
-                    throw new ArgumentException("logs cannot contain null");
-                }
+                throw new ArgumentException("logs cannot contain null");
             }
         }
 
