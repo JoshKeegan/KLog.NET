@@ -16,6 +16,7 @@ using System.Text;
 
 namespace KLog
 {
+    [Flags]
     public enum LogLevel
     {
         None = 0,
