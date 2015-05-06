@@ -34,8 +34,10 @@ namespace KLog
         //Internal methods
         internal override void addToCommand(DbCommand command, LogEntry entry)
         {
-            SqlParameter param = new SqlParameter(name, type, size);
-            param.Value = evalValue(entry);
+            SqlParameter param = new SqlParameter(name, type, size)
+            {
+                Value = evalValue(entry)
+            };
             command.Parameters.Add(param);
         }
     }
