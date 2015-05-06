@@ -158,10 +158,10 @@ namespace Demo_KLog
                 (SqlConnection)conn));
             DbLogParameter[] parameters = new DbLogParameter[]
             {
-                new SqlDbLogParameter("@message", new FEMessage(), SqlDbType.NText),
-                new SqlDbLogParameter("@logLevel", new FELogLevel(), SqlDbType.VarChar, 100),
-                new SqlDbLogParameter("@callingMethodFullName", new FECallingMethodFullName(), SqlDbType.NText),
-                new SqlDbLogParameter("@eventDate", new FEDateTime(), SqlDbType.DateTime2)
+                new SqlDbLogParameter("@message", new FeMessage(), SqlDbType.NText),
+                new SqlDbLogParameter("@logLevel", new FeLogLevel(), SqlDbType.VarChar, 100),
+                new SqlDbLogParameter("@callingMethodFullName", new FeCallingMethodFullName(), SqlDbType.NText),
+                new SqlDbLogParameter("@eventDate", new FeDateTime(), SqlDbType.DateTime2)
             };
 
             //MS SQL Notes:

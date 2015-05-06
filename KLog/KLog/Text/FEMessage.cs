@@ -1,6 +1,6 @@
 ﻿/*
  * KLog.NET
- * FEMessage - Formatting Entity that gets a Log Entry Message as a string
+ * FeMessage - Formatting Entity that gets a Log Entry Message as a string
  * Authors:
  *  Josh Keegan 30/03/2015
  */
@@ -12,7 +12,7 @@ using System.Text;
 
 namespace KLog.Text
 {
-    public class FEMessage : LogEntryFormattingEntity
+    public class FeMessage : LogEntryFormattingEntity
     {
         public override object Eval(LogEntry entry)
         {

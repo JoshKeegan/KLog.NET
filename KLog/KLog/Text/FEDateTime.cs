@@ -13,7 +13,7 @@ using System.Text;
 
 namespace KLog.Text
 {
-    public class FEDateTime : LogEntryFormattingEntity, IFormattingEntity
+    public class FeDateTime : LogEntryFormattingEntity, IFormattingEntity
     {
         //Public Methods
         public override object Eval(LogEntry entry)

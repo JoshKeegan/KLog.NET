@@ -42,9 +42,9 @@ namespace KLog
         public TextLog(LogLevel logLevel)
             : this(logLevel, 
             new LogEntryTextFormatter(
-                new FEStringDateTime("yyyy-MM-dd HH:mm:ss"), " - ",
-                new FECallingMethodFullName(), ": ",
-                new FELogLevel(), ": ",
-                new FEMessage())) {  }
+                new FeStringDateTime("yyyy-MM-dd HH:mm:ss"), " - ",
+                new FeCallingMethodFullName(), ": ",
+                new FeLogLevel(), ": ",
+                new FeMessage())) {  }
     }
 }

@@ -1,6 +1,6 @@
 ﻿/*
  * KLog.NET
- * FECallingMethodFullName - Formatting Entity that gets the full name of the calling method
+ * FeCallingMethodFullName - Formatting Entity that gets the full name of the calling method
  *  in a LogEntry
  * Authors:
  *  Josh Keegan 30/03/2015
@@ -13,7 +13,7 @@ using System.Text;
 
 namespace KLog.Text
 {
-    public class FECallingMethodFullName : LogEntryFormattingEntity
+    public class FeCallingMethodFullName : LogEntryFormattingEntity
     {
         public override object Eval(LogEntry entry)
         {

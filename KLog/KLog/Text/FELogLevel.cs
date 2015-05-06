@@ -1,6 +1,6 @@
 ﻿/*
  * KLog.NET
- * FELogLevel - Formatting Entity that gets a LogLevel as a string
+ * FeLogLevel - Formatting Entity that gets a LogLevel as a string
  * Authors:
  *  Josh Keegan 30/03/2015
  */
@@ -12,7 +12,7 @@ using System.Text;
 
 namespace KLog.Text
 {
-    public class FELogLevel : LogEntryFormattingEntity
+    public class FeLogLevel : LogEntryFormattingEntity
     {
         public override object Eval(LogEntry entry)
         {

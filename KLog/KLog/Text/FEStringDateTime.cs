@@ -1,6 +1,6 @@
 ﻿/*
  * KLog.NET
- * FEStringDateTime - Formatting Entity that gets a DateTime as a string.
+ * FeStringDateTime - Formatting Entity that gets a DateTime as a string.
  *  The act of fetching the DateTime is implemented by FEDateTime
  * Authors:
  *  Josh Keegan 30/03/2015
@@ -13,17 +13,17 @@ using System.Text;
 
 namespace KLog.Text
 {
-    public class FEStringDateTime : LogEntryFormattingEntity, IFormattingEntity
+    public class FeStringDateTime : LogEntryFormattingEntity, IFormattingEntity
     {
         //Private variables
         private readonly string formatter;
-        private readonly FEDateTime feDateTime;
+        private readonly FeDateTime feDateTime;
 
         //Constructors
-        public FEStringDateTime(string formatter)
+        public FeStringDateTime(string formatter)
         {
             this.formatter = formatter;
-            feDateTime = new FEDateTime();
+            feDateTime = new FeDateTime();
         }
 
         //Public Methods
