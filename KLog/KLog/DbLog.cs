@@ -60,7 +60,7 @@ namespace KLog
 
                     //Note: this same functionality could be gottin in .NET 4.0 by spawning a new thread
                     Task<int> insertTask = command.ExecuteNonQueryAsync();
-                    insertTask.ContinueWith((insertResult) =>
+                    insertTask.ContinueWith(insertResult =>
                     {
 #pragma warning disable 420
                         Interlocked.Decrement(ref currentlyInserting);

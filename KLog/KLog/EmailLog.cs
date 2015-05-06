@@ -242,12 +242,6 @@ namespace KLog
 
         #region Private Helpers
 
-        private static SmtpClient applyCredential(SmtpClient client, NetworkCredential cred)
-        {
-            client.Credentials = cred;
-            return client;
-        }
-
         private static bool isValidEmailAddress(string email)
         {
             try

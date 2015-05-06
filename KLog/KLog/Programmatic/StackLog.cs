@@ -16,7 +16,7 @@ namespace KLog.Programmatic
     public class StackLog : Log
     {
         //Public Variables
-        public Stack<LogEntry> Stack = new Stack<LogEntry>();
+        public readonly Stack<LogEntry> Stack = new Stack<LogEntry>();
 
         //Implement Log
         protected override void write(LogEntry entry)
