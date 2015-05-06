@@ -158,6 +158,8 @@ namespace Demo_KLog
                 (SqlConnection)conn));
             DbLogParameter[] parameters = new DbLogParameter[]
             {
+                //Can use the MS SQL-Specific implementation of DbLogParameter here and specify types & sizes to reduce DB load (only 
+                //  really matters if there is is a huge amount of logging going on)
                 new SqlDbLogParameter("@message", new FeMessage(), SqlDbType.NText),
                 new SqlDbLogParameter("@logLevel", new FeLogLevel(), SqlDbType.VarChar, 100),
                 new SqlDbLogParameter("@callingMethodFullName", new FeCallingMethodFullName(), SqlDbType.NText),
