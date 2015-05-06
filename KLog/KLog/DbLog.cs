@@ -47,12 +47,7 @@ namespace KLog
                 //Add the parameters and their values to the command
                 foreach(DbLogParameter parameter in parameters)
                 {
-                    DbParameter dbParameter = command.CreateParameter();
-                    dbParameter.ParameterName = parameter.Name;
-                    dbParameter.Value = parameter.EvalValue(entry);
-                    command.Parameters.Add(dbParameter);
-                    //TODO: optimisation. Optional DbType parameter here, can then prepare the command (probs 
-                    //  just on first run so it makes a difference if the command gets reused but doesn't if not)
+                    parameter.addToCommand(command, entry);
                 }
 
                 if(insertAsync)

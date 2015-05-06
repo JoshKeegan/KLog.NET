@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -17,21 +18,30 @@ namespace KLog
     public class DbLogParameter
     {
         //Public variables
-        public string Name { get; private set; }
-        public object Value { get; private set; }
+        private readonly string name;
+        private readonly object value;
 
         //Constructors
         public DbLogParameter(string name, object value)
         {
-            Name = name;
-            Value = value;
+            this.name = name;
+            this.value = value;
         }
 
-        //Public Methods
-        public object EvalValue(LogEntry entry)
+        //Internal methods
+        internal void addToCommand(DbCommand command, LogEntry entry)
+        {
+            DbParameter dbParameter = command.CreateParameter();
+            dbParameter.ParameterName = name;
+            dbParameter.Value = evalValue(entry);
+            command.Parameters.Add(dbParameter);
+        }
+
+        //Private methods
+        private object evalValue(LogEntry entry)
         {
             //Evaluate Value with the FE Evaluator
-            return FormattingEntityEvaluator.Eval(Value, entry);
+            return FormattingEntityEvaluator.Eval(value, entry);
         }
     }
 }
