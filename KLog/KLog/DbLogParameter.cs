@@ -17,9 +17,9 @@ namespace KLog
 {
     public class DbLogParameter
     {
-        //Public variables
-        private readonly string name;
-        private readonly object value;
+        //Protected variables
+        protected readonly string name;
+        protected readonly object value;
 
         //Constructors
         public DbLogParameter(string name, object value)
@@ -29,7 +29,7 @@ namespace KLog
         }
 
         //Internal methods
-        internal void addToCommand(DbCommand command, LogEntry entry)
+        internal virtual void addToCommand(DbCommand command, LogEntry entry)
         {
             DbParameter dbParameter = command.CreateParameter();
             dbParameter.ParameterName = name;
@@ -37,8 +37,8 @@ namespace KLog
             command.Parameters.Add(dbParameter);
         }
 
-        //Private methods
-        private object evalValue(LogEntry entry)
+        //Protected methods
+        protected object evalValue(LogEntry entry)
         {
             //Evaluate Value with the FE Evaluator
             return FormattingEntityEvaluator.Eval(value, entry);

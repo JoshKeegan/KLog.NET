@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -157,10 +158,10 @@ namespace Demo_KLog
                 (SqlConnection)conn));
             DbLogParameter[] parameters = new DbLogParameter[]
             {
-                new DbLogParameter("@message", new FEMessage()),
-                new DbLogParameter("@logLevel", new FELogLevel()),
-                new DbLogParameter("@callingMethodFullName", new FECallingMethodFullName()),
-                new DbLogParameter("@eventDate", new FEDateTime())
+                new SqlDbLogParameter("@message", new FEMessage(), SqlDbType.NText),
+                new SqlDbLogParameter("@logLevel", new FELogLevel(), SqlDbType.VarChar, 100),
+                new SqlDbLogParameter("@callingMethodFullName", new FECallingMethodFullName(), SqlDbType.NText),
+                new SqlDbLogParameter("@eventDate", new FEDateTime(), SqlDbType.DateTime2)
             };
 
             //MS SQL Notes:
