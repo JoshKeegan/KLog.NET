@@ -23,7 +23,7 @@ namespace KLog.Text
                 object evaluated = e.Eval();
 
                 //Allow for Formatting Entity chaining
-                return Eval(e);
+                return Eval(evaluated);
             }
             else
             {
