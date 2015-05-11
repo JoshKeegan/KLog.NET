@@ -52,7 +52,7 @@ namespace Demo_KLog
                 "/Test Log.",
                 new FeStringDateTime("yyyy-MM-dd"),
                 ".",
-                new FeEvalCounter(),
+                new FeStringEvalCounter(3),
                 ".log"), 
                 true, 
                 LOG_LEVEL);

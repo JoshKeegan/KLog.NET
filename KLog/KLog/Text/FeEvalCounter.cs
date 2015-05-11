@@ -35,7 +35,7 @@ namespace KLog.Text
             return Eval(true);
         }
 
-        public object Eval(bool increment)
+        public virtual object Eval(bool increment)
         {
             if (increment)
             {

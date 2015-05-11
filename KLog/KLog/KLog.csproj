@@ -66,6 +66,7 @@
     <Compile Include="TextLog.cs" />
     <Compile Include="Text\FeDateTime.cs" />
     <Compile Include="Text\FeEvalCounter.cs" />
+    <Compile Include="Text\FeStringEvalCounter.cs" />
     <Compile Include="Text\FileLogNameTextFormatter.cs" />
     <Compile Include="Text\FormattingEntityEvaluator.cs" />
     <Compile Include="Text\LogEntryFormattingEntity.cs" />
