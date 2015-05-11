@@ -30,7 +30,7 @@ namespace KLog.Text
         }
 
         //Public Methods
-        public new string Eval(bool incrementCounters = true) //TODO: does this actually hide the underlying method??
+        public new string Eval(bool incrementCounters = true)
         {
             if (!incrementCounters)
             {
