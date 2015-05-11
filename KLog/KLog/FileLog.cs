@@ -13,18 +13,27 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using KLog.Text;
+
 namespace KLog
 {
     public class FileLog : TextLog, IDisposable
     {
         //Private variables
+        private readonly LogEntryTextFormatter feFilePath;
         private string filePath;
         private StreamWriter logWriter;
-        private object logLock;
+        private readonly object logLock;
+
+        //Public Variables
+        public readonly bool Rotate;
 
         //Log implementation
         protected override void write(string message)
         {
+            //Rotate the log file being used if necessary
+            rotateIfNecessary();
+
             //thread safety
             lock (logLock)
             {
@@ -34,13 +43,18 @@ namespace KLog
         }
 
         //Constructors
-        public FileLog(string filePath, LogLevel logLevel)
+        public FileLog(LogEntryTextFormatter feFilePath, bool rotate, LogLevel logLevel)
             : base(logLevel)
         {
-            this.filePath = filePath;
+            this.feFilePath = feFilePath;
+            Rotate = rotate;
+            filePath = feFilePath.Eval();
             logWriter = new StreamWriter(filePath);
             logLock = new object();
         }
+
+        public FileLog(string filePath, LogLevel logLevel)
+            : this(new LogEntryTextFormatter(filePath), false, logLevel) {  }
 
         //Implement IDisposable
         public void Dispose()
@@ -59,10 +73,43 @@ namespace KLog
             //Called Dispose(): Free managed resources
             if (disposing)
             {
-                logWriter.Close();
+                // thread safety
+                lock (logLock)
+                {
+                    logWriter.Close();
+                }
             }
 
             //Dispose or finaliser, free any native resources
+        }
+
+        // Private methods
+        private void rotateIfNecessary()
+        {
+            if (Rotate)
+            {
+                string newFilePath = feFilePath.Eval();
+
+                //If the file path to write to has changed since the last item was written to the log, change the stream to the new file
+                //  to the new file
+                if (filePath != newFilePath)
+                {
+                    // thread safety
+                    lock (logLock)
+                    {
+                        //Check that another thread hasn't rotated the stream whilst waiting for the lock
+                        if (filePath != newFilePath)
+                        {
+                            logWriter.Close();
+
+                            //TODO: Option to automatically compress old log files
+
+                            logWriter = new StreamWriter(newFilePath);
+                            filePath = newFilePath;
+                        }
+                    }
+                }
+            }
         }
     }
 }

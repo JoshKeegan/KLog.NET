@@ -40,6 +40,18 @@ namespace KLog.Text
          * of runtime parsing
          */
 
+        public string Eval()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            foreach (object o in format)
+            {
+                builder.Append(FormattingEntityEvaluator.Eval(o));
+            }
+
+            return builder.ToString();
+        }
+
         public string Eval(LogEntry entry)
         {
             StringBuilder builder = new StringBuilder();

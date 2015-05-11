@@ -11,11 +11,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using KLog.Text;
+
 namespace KLog
 {
     public class ConcurrentFileLog : LogConcurrencyWrapper<FileLog>
     {
         //Constructors (should mirror those available in FileLog)
+        public ConcurrentFileLog(LogEntryTextFormatter feFilePath, bool rotate, LogLevel logLevel)
+            : base(new FileLog(feFilePath, rotate, logLevel)) {  }
+
         public ConcurrentFileLog(string filePath, LogLevel logLevel)
             : base(new FileLog(filePath, logLevel)) {  }
     }

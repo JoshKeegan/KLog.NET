@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -40,21 +41,27 @@ namespace Demo_KLog
             //Initialise file logging
             Log fileLog = null;
             bool dirCreated = false;
-            if (!System.IO.Directory.Exists(LOGS_DIR))
+            if (!Directory.Exists(LOGS_DIR))
             {
                 dirCreated = true;
-                System.IO.Directory.CreateDirectory(LOGS_DIR);
+                Directory.CreateDirectory(LOGS_DIR);
             }
 
+            //TODO: needs to have auto-incrementing FE so the num is determined inside the KLog library
             int logAttempt = 0;
             while (true)
             {
-                string logName = String.Format("{0}/{1}.{2}.{3:000}.log", LOGS_DIR, "Test Log", 
-                    DateTime.Now.ToString("yyyy-MM-dd"), logAttempt);
+                LogEntryTextFormatter feLogName = new LogEntryTextFormatter(
+                    LOGS_DIR,
+                    "/Test Log.",
+                    new FeStringDateTime("yyyy-MM-dd"),
+                    ".",
+                    String.Format("{0:000}", logAttempt),
+                    ".log");
 
-                if (!System.IO.File.Exists(logName))
+                if (!File.Exists(feLogName.Eval()))
                 {
-                    fileLog = new ConcurrentFileLog(logName, LOG_LEVEL);
+                    fileLog = new ConcurrentFileLog(feLogName, true, LOG_LEVEL);
 
                     break;
                 }
