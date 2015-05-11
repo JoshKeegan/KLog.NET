@@ -30,7 +30,12 @@ namespace KLog.Text
         }
 
         //Public Methods
-        public new string Eval(bool incrementCounters = true)
+        public override string Eval()
+        {
+            return Eval(true);
+        }
+
+        public string Eval(bool incrementCounters)
         {
             if (!incrementCounters)
             {

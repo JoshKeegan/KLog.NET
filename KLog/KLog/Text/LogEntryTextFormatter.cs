@@ -40,7 +40,7 @@ namespace KLog.Text
          * of runtime parsing
          */
 
-        public string Eval()
+        public virtual string Eval()
         {
             StringBuilder builder = new StringBuilder();
 
@@ -52,7 +52,7 @@ namespace KLog.Text
             return builder.ToString();
         }
 
-        public string Eval(LogEntry entry)
+        public virtual string Eval(LogEntry entry)
         {
             StringBuilder builder = new StringBuilder();
 
