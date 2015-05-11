@@ -57,6 +57,13 @@ namespace KLog.Text
                 {
                     string filePath = base.Eval();
 
+                    //Make sure the directory that would contain this file exists
+                    string dirPath = Path.GetDirectoryName(filePath);
+                    if (!String.IsNullOrEmpty(dirPath))
+                    {
+                        Directory.CreateDirectory(dirPath);
+                    }
+
                     if (!File.Exists(filePath))
                     {
                         return filePath;

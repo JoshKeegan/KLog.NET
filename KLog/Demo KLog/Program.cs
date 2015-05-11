@@ -39,15 +39,7 @@ namespace Demo_KLog
                 KLog.LogLevel.Error);
 
             //Initialise file logging
-            Log fileLog = null;
-            bool dirCreated = false;
-            if (!Directory.Exists(LOGS_DIR))
-            {
-                dirCreated = true;
-                Directory.CreateDirectory(LOGS_DIR);
-            }
-
-            fileLog = new FileLog(new FileLogNameTextFormatter(
+            Log fileLog = new FileLog(new FileLogNameTextFormatter(
                 LOGS_DIR,
                 "/Test Log.",
                 new FeStringDateTime("yyyy-MM-dd"),
@@ -59,11 +51,6 @@ namespace Demo_KLog
 
             DefaultLog.Log = new CompoundLog(consoleLog, fileLog, emailLog);
             DefaultLog.Info("Log Initialised");
-
-            if (dirCreated)
-            {
-                DefaultLog.Warn("Logs directory was not found, creating . . .");
-            }
 
             DefaultLog.Info("test");
 
