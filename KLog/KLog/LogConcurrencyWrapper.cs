@@ -109,15 +109,8 @@ namespace KLog
                 catch(AggregateException aggregateException)
                 {
                     //Exclude TaskCanceledException, since this is semi-expected ~ see bug #6
-                    List<Exception> nonTaskCanceledExceptions = new List<Exception>();
-
-                    foreach(Exception e in aggregateException.InnerExceptions)
-                    {
-                        if(e.GetType() != typeof(TaskCanceledException))
-                        {
-                            nonTaskCanceledExceptions.Add(e);
-                        }
-                    }
+                    Exception[] nonTaskCanceledExceptions = aggregateException.InnerExceptions.Where(
+                        e => e.GetType() != typeof (TaskCanceledException)).ToArray();
 
                     //If there were any exceptions (after excluding TaskCanceledException), throw them
                     if(nonTaskCanceledExceptions.Any())

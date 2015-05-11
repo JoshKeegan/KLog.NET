@@ -48,7 +48,7 @@ namespace KLog
         //Constructors
         public Log(LogLevel logLevel)
         {
-            this.LogLevel = logLevel;
+            LogLevel = logLevel;
         }
 
         //Public Methods
@@ -129,7 +129,7 @@ namespace KLog
         private bool mayWriteLevel(LogLevel logLevel)
         {
             //Use bitwise AND for checking specific rights
-            return (this.LogLevel & logLevel) == logLevel;
+            return (LogLevel & logLevel) == logLevel;
         }
 
         protected abstract void write(LogEntry entry);

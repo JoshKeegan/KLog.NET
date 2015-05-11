@@ -246,7 +246,7 @@ namespace KLog
         {
             try
             {
-                MailAddress address = new MailAddress(email);
+                new MailAddress(email);
                 return true;
             }
             catch
