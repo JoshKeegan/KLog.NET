@@ -20,7 +20,7 @@ namespace KLog
     public class FileLog : TextLog, IDisposable
     {
         //Private variables
-        private readonly LogEntryTextFormatter feFilePath;
+        private readonly FileLogNameTextFormatter feFilePath;
         private string filePath;
         private StreamWriter logWriter;
         private readonly object logLock;
@@ -43,7 +43,7 @@ namespace KLog
         }
 
         //Constructors
-        public FileLog(LogEntryTextFormatter feFilePath, bool rotate, LogLevel logLevel)
+        public FileLog(FileLogNameTextFormatter feFilePath, bool rotate, LogLevel logLevel)
             : base(logLevel)
         {
             this.feFilePath = feFilePath;
@@ -54,7 +54,7 @@ namespace KLog
         }
 
         public FileLog(string filePath, LogLevel logLevel)
-            : this(new LogEntryTextFormatter(filePath), false, logLevel) {  }
+            : this(new FileLogNameTextFormatter(filePath), false, logLevel) {  }
 
         //Implement IDisposable
         public void Dispose()
@@ -88,7 +88,8 @@ namespace KLog
         {
             if (Rotate)
             {
-                string newFilePath = feFilePath.Eval();
+                //Evaluate without incrementing any counters
+                string newFilePath = feFilePath.Eval(false);
 
                 //If the file path to write to has changed since the last item was written to the log, change the stream to the new file
                 //  to the new file
@@ -103,6 +104,10 @@ namespace KLog
                             logWriter.Close();
 
                             //TODO: Option to automatically compress old log files
+
+                            //Now work out the new log file path by resetting the counters and evaluating the FileLogNameTextFormatter again
+                            feFilePath.ResetCounters();
+                            newFilePath = feFilePath.Eval();
 
                             logWriter = new StreamWriter(newFilePath);
                             filePath = newFilePath;

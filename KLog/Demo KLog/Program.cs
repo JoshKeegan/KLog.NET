@@ -47,26 +47,15 @@ namespace Demo_KLog
                 Directory.CreateDirectory(LOGS_DIR);
             }
 
-            //TODO: needs to have auto-incrementing FE so the num is determined inside the KLog library
-            int logAttempt = 0;
-            while (true)
-            {
-                LogEntryTextFormatter feLogName = new LogEntryTextFormatter(
-                    LOGS_DIR,
-                    "/Test Log.",
-                    new FeStringDateTime("yyyy-MM-dd"),
-                    ".",
-                    String.Format("{0:000}", logAttempt),
-                    ".log");
-
-                if (!File.Exists(feLogName.Eval()))
-                {
-                    fileLog = new ConcurrentFileLog(feLogName, true, LOG_LEVEL);
-
-                    break;
-                }
-                logAttempt++;
-            }
+            fileLog = new FileLog(new FileLogNameTextFormatter(
+                LOGS_DIR,
+                "/Test Log.",
+                new FeStringDateTime("yyyy-MM-dd"),
+                ".",
+                new FeEvalCounter(),
+                ".log"), 
+                true, 
+                LOG_LEVEL);
 
             DefaultLog.Log = new CompoundLog(consoleLog, fileLog, emailLog);
             DefaultLog.Info("Log Initialised");
