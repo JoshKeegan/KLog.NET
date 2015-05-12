@@ -17,7 +17,8 @@ namespace KLog.Text
         private readonly string format;
 
         //Constructors
-        public FeStringEvalCounter(int minNumSignificantFigures)
+        public FeStringEvalCounter(int minNumSignificantFigures, long indexedFrom = DEFAULT_INDEXED_FROM)
+            : base(indexedFrom)
         {
             format = "{0:" + new string('0', minNumSignificantFigures) + "}";
         }

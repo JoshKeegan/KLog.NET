@@ -73,6 +73,9 @@ namespace Demo_KLog
             //Run the Internal log demo
             internalLogDemo();
 
+            //Run the File Log Rotation Demo
+            fileLogRotationDemo();
+
             //Wait for anything in the default log to be written out
             DefaultLog.BlockWhileWriting();
         }
@@ -197,6 +200,38 @@ namespace Demo_KLog
             //Clean up
             InternalLog.Log = internalLogBefore;
             internalLog.Dispose();
+        }
+
+        private static void fileLogRotationDemo()
+        {
+            FileLog fileLog = new FileLog(new FileLogNameTextFormatter(
+                LOGS_DIR,
+                "/rotationDemo/Rotation.",
+                new FeStringDateTime("yyyy-MM-dd_fff"),
+                ".",
+                new FeStringEvalCounter(3),
+                ".log"),
+                true,
+                LOG_LEVEL);
+
+            for (int i = 0; i < 10; i++)
+            {
+                fileLog.Debug("Message A {0}", i);
+            }
+            Thread.Sleep(1);
+            for (int i = 0; i < 10; i++)
+            {
+                fileLog.Debug("Message B {0}", i);
+            }
+            Thread.Sleep(1);
+            for (int i = 0; i < 10; i++)
+            {
+                fileLog.Debug("Message C {0}", i);
+            }
+
+            //Clean up
+            fileLog.BlockWhileWriting();
+            fileLog.Dispose();
         }
     }
 }

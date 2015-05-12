@@ -16,10 +16,14 @@ namespace KLog.Text
 {
     public class FeEvalCounter : LogEntryFormattingEntity, IFormattingEntity
     {
+        //Constants
+        protected const long DEFAULT_INDEXED_FROM = 0;
+
+        //Private Variables
         private long count;
 
         //Constructors
-        public FeEvalCounter(long indexedFrom = 0)
+        public FeEvalCounter(long indexedFrom = DEFAULT_INDEXED_FROM)
         {
             Interlocked.Exchange(ref count, indexedFrom - 1);
         }
