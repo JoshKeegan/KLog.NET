@@ -23,7 +23,7 @@ namespace KLog
         private readonly FileLogNameTextFormatter feFilePath;
         private string filePath;
         private StreamWriter logWriter;
-        private readonly object logLock;
+        private readonly object logLock = new object();
 
         //Public Variables
         public readonly bool Rotate;
@@ -50,11 +50,20 @@ namespace KLog
             Rotate = rotate;
             filePath = feFilePath.Eval();
             logWriter = new StreamWriter(filePath);
-            logLock = new object();
         }
 
+        /// <summary>
+        /// Makes a new FileLog using a specified path to a file. Will append content to the file if it already exists
+        /// </summary>
+        /// <param name="filePath">path to the file to log to</param>
+        /// <param name="logLevel">Log Level</param>
         public FileLog(string filePath, LogLevel logLevel)
-            : this(new FileLogNameTextFormatter(filePath), false, logLevel) {  }
+            : base(logLevel)
+        {
+            Rotate = false;
+            this.filePath = filePath;
+            logWriter = new StreamWriter(filePath, true); //Append to file if it already exists
+        }
 
         //Implement IDisposable
         public void Dispose()
