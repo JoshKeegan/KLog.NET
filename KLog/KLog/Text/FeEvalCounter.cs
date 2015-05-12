@@ -20,11 +20,13 @@ namespace KLog.Text
         protected const long DEFAULT_INDEXED_FROM = 0;
 
         //Private Variables
+        private readonly long indexedFrom;
         private long count;
 
         //Constructors
         public FeEvalCounter(long indexedFrom = DEFAULT_INDEXED_FROM)
         {
+            this.indexedFrom = indexedFrom;
             Interlocked.Exchange(ref count, indexedFrom - 1);
         }
 
@@ -50,7 +52,7 @@ namespace KLog.Text
 
         public void Reset()
         {
-            Interlocked.Exchange(ref count, 0);
+            Interlocked.Exchange(ref count, indexedFrom - 1);
         }
     }
 }
