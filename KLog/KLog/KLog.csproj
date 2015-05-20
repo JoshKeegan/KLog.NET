@@ -55,6 +55,7 @@
     <Compile Include="EmailLog.cs" />
     <Compile Include="FileLog.cs" />
     <Compile Include="LogEntry.cs" />
+    <Compile Include="LogFilter.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="Helpers\ReflectionHelpers.cs" />
     <Compile Include="Log.cs" />
