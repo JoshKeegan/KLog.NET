@@ -3,6 +3,7 @@ language: csharp
 solution: KLog/KLog.sln
 
 before_install:
+  - chmod +x fetchNuGet.sh
   - ./fetchNuGet.sh
   - sudo apt-get install nunit-console
 
