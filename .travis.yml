@@ -1,0 +1,12 @@
+language: csharp
+
+solution: KLog/KLog.sln
+
+before_install:
+  - sudo apt-get install nunit-console
+
+before_script:
+  - nuget restore KLog/KLog.sln
+
+after_script:
+  - nunit-console KLog/UnitTests/bin/Release/UnitTests.dll
