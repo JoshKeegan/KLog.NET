@@ -198,6 +198,9 @@ namespace UnitTests
                 "test", "testPassword", LogLevel.All);
             log.Debug("test");
 
+            //Wait for the email to have been sent (or rather not)
+            log.BlockWhileWriting();
+
             LogEntry entry = internalLog.Stack.Pop();
 
             Assert.AreEqual(expected, entry.CallingFrame.GetMethod().DeclaringType);
