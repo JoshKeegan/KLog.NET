@@ -66,8 +66,16 @@ namespace KLog
                 //smtpClient.Send(mailMessage);
                 smtpClient.SendCompleted += (sender, eventArgs) =>
                 {
-                    //Dispose of the SMTP Client
-                    smtpClient.Dispose();
+                    //Dispose of the SMTP Client, hiding any exceptions from the client application.
+                    //  Instead they will get sent to the Internal Log which should be monitored during the development of an application
+                    try
+                    {
+                        smtpClient.Dispose();
+                    }
+                    catch (Exception e)
+                    {
+                        InternalLog.Error("Error whilst disposing of SMTP Client. Exception\n{0}", e);
+                    }
 
                     //Message sent
 #pragma warning disable 420
