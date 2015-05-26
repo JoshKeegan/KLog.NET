@@ -3,6 +3,7 @@ language: csharp
 solution: KLog/KLog.sln
 
 before_install:
+  - fetchNuGet.sh
   - sudo apt-get install nunit-console
 
 before_script:
