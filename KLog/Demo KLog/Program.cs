@@ -21,7 +21,7 @@ using Npgsql;
 
 namespace Demo_KLog
 {
-    static class Program
+    public static class Program
     {
         //Constants
         private const string LOGS_DIR = "logs";
