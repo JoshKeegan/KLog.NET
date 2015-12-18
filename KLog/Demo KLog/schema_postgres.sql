@@ -8,7 +8,7 @@ CREATE TABLE demo
   message text NOT NULL,
   "logLevel" text NOT NULL,
   "callingMethodFullName" text NOT NULL,
-  "eventDate" time with time zone NOT NULL,
+  "eventDate" timestamp with time zone NOT NULL,
   CONSTRAINT "PK_demo" PRIMARY KEY (id)
 )
 WITH (
