@@ -113,12 +113,10 @@ namespace Demo_KLog
             /*
              * PostgreSQL
              */
-
-            //Have had to disable connection pooling, since it seems Npgsql implements this with a normal dictionary (which isn't thread-safe)
             DbLog.GetDbConnection getDbConnection =
                 () =>
                     new NpgsqlConnection(
-                        "Server=127.0.0.1;Port=5432;User Id=klogDemoUser;Password=wow_much_security;Database=KLog;Pooling=false");
+                        "Server=127.0.0.1;Port=5432;User Id=klogDemoUser;Password=wow_much_security;Database=KLog;Pooling=true");
             DbLog.GetDbCommand getDbCommand =
                 conn =>
                     new NpgsqlCommand(
