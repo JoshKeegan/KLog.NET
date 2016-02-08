@@ -25,10 +25,25 @@ namespace Demo_KLog
     {
         //Constants
         private const string LOGS_DIR = "logs";
+        private const string INTERNAL_LOGS_DIR = LOGS_DIR + "/internal/";
         private const KLog.LogLevel LOG_LEVEL = KLog.LogLevel.All;
 
         public static void Main(string[] args)
         {
+            // Initialise Internal Logging
+            Log internalFileLog = new FileLog(new FileLogNameTextFormatter(
+                INTERNAL_LOGS_DIR,
+                "Internal Test log.",
+                new FeStringDateTime("yyyy-MM-dd"),
+                ".",
+                new FeStringEvalCounter(3),
+                ".log"),
+                true,
+                LogLevel.All);
+
+            InternalLog.Log = internalFileLog;
+            InternalLog.Log.Info("Internal Log Initialised");
+
             //Initialise Console Logging
             Log consoleLog = new ConcurrentColouredConsoleLog(LOG_LEVEL);
 
