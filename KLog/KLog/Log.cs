@@ -106,7 +106,7 @@ namespace KLog
         {
             if (mayWriteLevel(logLevel))
             {
-                write(new LogEntry(message, logLevel, getCallingFrame(), DateTime.Now));
+                tryWrite(new LogEntry(message, logLevel, getCallingFrame(), DateTime.Now));
             }
         }
 
@@ -114,7 +114,7 @@ namespace KLog
         {
             if(mayWriteLevel(logLevel))
             {
-                write(new LogEntry(String.Format(message, args), logLevel, getCallingFrame(), DateTime.Now));
+                tryWrite(new LogEntry(String.Format(message, args), logLevel, getCallingFrame(), DateTime.Now));
             }
         }
 
@@ -122,7 +122,7 @@ namespace KLog
         {
             if(mayWriteLevel(entry.LogLevel))
             {
-                write(entry);
+                tryWrite(entry);
             }
         }
 
@@ -132,11 +132,33 @@ namespace KLog
             return (LogLevel & logLevel) == logLevel;
         }
 
+        /// <summary>
+        /// Try and write an Entry to this Log.
+        /// Will catch any errors and log them to the InternalLog rather than propagating them up to the caller.
+        /// </summary>
+        private void tryWrite(LogEntry entry)
+        {
+            try
+            {
+                write(entry);
+            }
+            catch (Exception e)
+            {
+                // TODO: Check if we have already been through the InternalLog to prevent an infinite loop if the InternalLog writes are what's erroring
+                InternalLog.Error("An error occurred whilst attempting to write to a Log. Exception:\n{0}", e);
+            }
+        }
+
+        /// <summary>
+        /// Write an Entry to this Log. 
+        /// Need not handle errors. If automatic error handling is required, call Log.tryWrite
+        /// </summary>
+        /// <param name="entry"></param>
         protected abstract void write(LogEntry entry);
 
         internal void internalWrite(LogEntry entry)
         {
-            write(entry);
+            tryWrite(entry);
         }
 
         private static StackFrame getCallingFrame()
