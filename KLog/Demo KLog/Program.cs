@@ -26,7 +26,7 @@ namespace Demo_KLog
         //Constants
         private const string LOGS_DIR = "logs";
         private const string INTERNAL_LOGS_DIR = LOGS_DIR + "/internal/";
-        private const KLog.LogLevel LOG_LEVEL = KLog.LogLevel.All;
+        private const LogLevel LOG_LEVEL = LogLevel.All;
 
         public static void Main(string[] args)
         {
@@ -51,7 +51,7 @@ namespace Demo_KLog
             EmailLog emailLog = new EmailLog("test@visav.net", 
                 new string[] { "josh@visav.co.uk", "josh.keegan@gmx.com" }, 
                 "mail.visav.net", "test@visav.net", "Qwerty1234", "KLog Demo Email", 
-                KLog.LogLevel.Error);
+                LogLevel.Error);
 
             //Initialise file logging
             Log fileLog = new FileLog(new FileLogNameTextFormatter(
@@ -205,7 +205,7 @@ namespace Demo_KLog
 
             //Use an EmailLog with incorrect SMTP server settings to trigger a call to the InternalLog
             EmailLog log = new EmailLog("test@made_up.com", "josh.keegan@also_made_up.com", "smtp.made_up.com",
-                "test", "testPassword", KLog.LogLevel.All);
+                "test", "testPassword", LogLevel.All);
             log.Debug("test");
 
             InternalLog.Log.BlockWhileWriting();
