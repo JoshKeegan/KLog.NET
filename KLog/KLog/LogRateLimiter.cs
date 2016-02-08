@@ -103,10 +103,6 @@ namespace KLog
             {
                 throw new ArgumentNullException(nameof(log));
             }
-            if(timeSpan == null)
-            {
-                throw new ArgumentNullException(nameof(timeSpan));
-            }
             if(numEntries < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(numEntries), nameof(numEntries) + " must be >= 0");
