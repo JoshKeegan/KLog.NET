@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="DisposableLog.cs" />
     <Compile Include="EvaluatableObject.cs" />
+    <Compile Include="ExceptionLog.cs" />
     <Compile Include="ExternalStackLog.cs" />
     <Compile Include="LogConcurrencyWrapperTests.cs" />
     <Compile Include="LogFilterTests.cs" />

@@ -142,6 +142,47 @@ namespace UnitTests
 
         #endregion
 
+        #region Test Write Exceptions Caught
+
+        [Test]
+        public void TestWriteThrowsExceptionNotPropagated()
+        {
+            ExceptionLog log = new ExceptionLog(LogLevel.All);
+
+            log.Info("test");
+        }
+
+        [Test]
+        public void TestWriteThrowsExceptionLoggedToInternalLog()
+        {
+            StackLog internalLog = new StackLog(LogLevel.All);
+            InternalLog.Log = internalLog;
+
+            ExceptionLog log = new ExceptionLog(LogLevel.All);
+
+            log.Info("test");
+
+            Assert.IsTrue(internalLog.Stack.Any());
+        }
+
+        [Test]
+        public void TestWriteThrowsExceptionOnInternalLogDoesntLoop()
+        {
+            StackLog stackLog = new StackLog(LogLevel.All);
+            ExceptionLog exceptionLog = new ExceptionLog(LogLevel.All);
+            Log internalLog = new CompoundLog(stackLog, exceptionLog);
+            InternalLog.Log = internalLog;
+
+            exceptionLog.Info("test");
+
+            // Has 1 and only 1 entry
+            Assert.IsTrue(stackLog.Stack.Any());
+            stackLog.Stack.Pop();
+            Assert.IsFalse(stackLog.Stack.Any());
+        }
+
+        #endregion
+
         #region Test getCallingFrame
 
         [Test]

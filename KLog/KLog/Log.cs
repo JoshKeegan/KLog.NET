@@ -144,8 +144,11 @@ namespace KLog
             }
             catch (Exception e)
             {
-                // TODO: Check if we have already been through the InternalLog to prevent an infinite loop if the InternalLog writes are what's erroring
-                InternalLog.Error("An error occurred whilst attempting to write to a Log. Exception:\n{0}", e);
+                // Check if we have already been through the InternalLog to prevent an infinite loop if the InternalLog writes are what's erroring
+                if (!isCallThroughInternalLog())
+                {
+                    InternalLog.Error("An error occurred whilst attempting to write to a Log. Exception:\n{0}", e);
+                }
             }
         }
 
@@ -161,6 +164,29 @@ namespace KLog
             tryWrite(entry);
         }
 
+        private static bool isCallThroughInternalLog()
+        {
+            StackTrace trace = new StackTrace();
+
+            // Find whether the calling frame has been through the InternalLog class
+            for (int i = 0; i < trace.FrameCount; i++)
+            {
+                StackFrame frame = trace.GetFrame(i);
+                Type callingType = frame?.GetMethod().DeclaringType;
+
+                if (callingType != null)
+                {
+                    // If we've hit InternalLog, bingo!
+                    if (callingType == typeof (InternalLog))
+                    {
+                        return true;
+                    }
+                }
+            }
+            // Checked all stack frames & couldn't find InternalLog anywhere in them
+            return false;
+        }
+
         private static StackFrame getCallingFrame()
         {
             StackTrace trace = new StackTrace();
@@ -169,40 +195,36 @@ namespace KLog
             for (int i = STACK_FRAME_SEARCH_FROM_IDX; i < trace.FrameCount; i++)
             {
                 StackFrame frame = trace.GetFrame(i);
+                Type callingType = frame?.GetMethod().DeclaringType;
 
-                if (frame != null)
+                if(callingType != null)
                 {
-                    Type callingType = frame.GetMethod().DeclaringType;
-
-                    if(callingType != null)
+                    //If we've hit InternalLog, the next frame outside of InternalLog (which may be inside KLog)
+                    //  is the calling StackFrame
+                    if(callingType == typeof(InternalLog))
                     {
-                        //If we've hit InternalLog, the next frame outside of InternalLog (which may be inside KLog)
-                        //  is the calling StackFrame
-                        if(callingType == typeof(InternalLog))
+                        for (; i < trace.FrameCount; i++)
                         {
-                            for (; i < trace.FrameCount; i++)
+                            frame = trace.GetFrame(i);
+
+                            if(frame != null)
                             {
-                                frame = trace.GetFrame(i);
+                                callingType = frame.GetMethod().DeclaringType;
 
-                                if(frame != null)
+                                if(callingType != null)
                                 {
-                                    callingType = frame.GetMethod().DeclaringType;
-
-                                    if(callingType != null)
+                                    if(callingType != typeof(InternalLog))
                                     {
-                                        if(callingType != typeof(InternalLog))
-                                        {
-                                            return frame;
-                                        }
+                                        return frame;
                                     }
                                 }
                             }
                         }
-                        //Else if this calling type is outside of the KLog namespace
-                        else if(!typesInNamespace.Contains(callingType))
-                        {
-                            return frame;
-                        }
+                    }
+                    //Else if this calling type is outside of the KLog namespace
+                    else if(!typesInNamespace.Contains(callingType))
+                    {
+                        return frame;
                     }
                 }
             }
