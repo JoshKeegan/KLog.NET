@@ -113,7 +113,7 @@ namespace Demo_KLog
             /*
              * PostgreSQL
              */
-            DbLog.GetDbConnection getDbConnection =
+            /*DbLog.GetDbConnection getDbConnection =
                 () =>
                     new NpgsqlConnection(
                         "Server=127.0.0.1;Port=5432;User Id=klogDemoUser;Password=wow_much_security;Database=KLog;Pooling=true");
@@ -129,13 +129,13 @@ namespace Demo_KLog
                 new DbLogParameter(":logLevel", new FeLogLevel()),
                 new DbLogParameter(":callingMethodFullName", new FeCallingMethodFullName()),
                 new DbLogParameter(":eventDate", new FeDateTime())
-            };
+            };*/
 
             /*
              * MS SQL
              */
 
-            /*DbLog.GetDbConnection getDbConnection = (() => new SqlConnection("Server=127.0.0.1; Database=KLog; User ID=klogDemoUser; pwd=wow_much_security"));
+            DbLog.GetDbConnection getDbConnection = (() => new SqlConnection("Server=127.0.0.1; Database=KLog; User ID=klogDemoUser; pwd=wow_much_security"));
             DbLog.GetDbCommand getDbCommand = (conn => 
                 new SqlCommand("INSERT INTO demo (message, logLevel, callingMethodFullName, eventDate) " +
                 "VALUES (@message, @logLevel, @callingMethodFullName, @eventDate)",
@@ -148,7 +148,7 @@ namespace Demo_KLog
                 new SqlDbLogParameter("@logLevel", new FeLogLevel(), SqlDbType.VarChar, 100),
                 new SqlDbLogParameter("@callingMethodFullName", new FeCallingMethodFullName(), SqlDbType.NText),
                 new SqlDbLogParameter("@eventDate", new FeDateTime(), SqlDbType.DateTime2)
-            };*/
+            };
 
             //MS SQL Notes:
             //async doesn't currently work when not running in the debugger (doesn't insert all entries).
