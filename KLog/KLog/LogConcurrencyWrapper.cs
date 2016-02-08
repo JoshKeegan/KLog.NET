@@ -48,7 +48,7 @@ namespace KLog
             //Validation
             if(log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
 
             underlyingLog = log;

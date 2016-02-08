@@ -25,7 +25,7 @@ namespace KLog.Text
             {
                 throw new ArgumentException(
                     "format must contain an FeEvalCounter. This is to prevent a log file from ever being overwritten.",
-                    "format");
+                    nameof(format));
             }
         }
 

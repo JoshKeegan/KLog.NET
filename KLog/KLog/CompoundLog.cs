@@ -42,7 +42,7 @@ namespace KLog
             //Validation
             if(logs == null)
             {
-                throw new ArgumentNullException("logs");
+                throw new ArgumentNullException(nameof(logs));
             }
             
             //Optimisation: use an array for logs

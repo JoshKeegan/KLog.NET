@@ -113,15 +113,15 @@ namespace KLog
             //Validation
             if(fromAddress == null)
             {
-                throw new ArgumentNullException("fromAddress");
+                throw new ArgumentNullException(nameof(fromAddress));
             }
             if(toAddresses == null)
             {
-                throw new ArgumentNullException("toAddresses");
+                throw new ArgumentNullException(nameof(toAddresses));
             }
             if(smtpServerHostname == null)
             {
-                throw new ArgumentNullException("smtpServerHostname");
+                throw new ArgumentNullException(nameof(smtpServerHostname));
             }
             //Validate fromAddress & toAddress are valid email addresses
             if(!isValidEmailAddress(fromAddress))
@@ -145,7 +145,7 @@ namespace KLog
                 int port = smtpServerPort.GetValueOrDefault();
                 if(port <= 0 || port > 65535)
                 {
-                    throw new ArgumentOutOfRangeException("smtpServerPort", "smtpServerPort must be null or in the range 1-65,535 (inclusive)");
+                    throw new ArgumentOutOfRangeException(nameof(smtpServerPort), "smtpServerPort must be null or in the range 1-65,535 (inclusive)");
                 }
             }
 

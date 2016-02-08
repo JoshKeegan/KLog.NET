@@ -101,23 +101,23 @@ namespace KLog
             //Validation
             if(log == null)
             {
-                throw new ArgumentNullException("log");
+                throw new ArgumentNullException(nameof(log));
             }
             if(timeSpan == null)
             {
-                throw new ArgumentNullException("timeSpan");
+                throw new ArgumentNullException(nameof(timeSpan));
             }
             if(numEntries < 0)
             {
-                throw new ArgumentOutOfRangeException("numEntries", "numEntries must be >= 0");
+                throw new ArgumentOutOfRangeException(nameof(numEntries), "numEntries must be >= 0");
             }
             if(onEnterRateLimit == null)
             {
-                throw new ArgumentNullException("onEnterRateLimit");
+                throw new ArgumentNullException(nameof(onEnterRateLimit));
             }
             if (onExitRateLimit == null)
             {
-                throw new ArgumentNullException("onExitRateLimit");
+                throw new ArgumentNullException(nameof(onExitRateLimit));
             }
             underlyingLog = log;
 
