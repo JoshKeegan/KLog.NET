@@ -156,7 +156,6 @@ namespace KLog
         /// Write an Entry to this Log. 
         /// Need not handle errors. If automatic error handling is required, call Log.tryWrite
         /// </summary>
-        /// <param name="entry"></param>
         protected abstract void write(LogEntry entry);
 
         internal void internalWrite(LogEntry entry)
