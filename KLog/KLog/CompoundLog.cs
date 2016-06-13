@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using KLog.ExtensionMethods.SystemExt.Collections.Generic;
 
 namespace KLog
 {
@@ -37,7 +38,7 @@ namespace KLog
 
         //Constructors
         public CompoundLog(IEnumerable<Log> logs)
-            : base(LogLevel.All) //Allow all through the Compound Log. Each log within the compound log can have its own LogLevel
+            : base(logs.Select(l => l.LogLevel).Combine()) // Allow events that will match any of the underlying logs through the Compound Log. Each log within the compound log can have its own LogLevel
         {
             //Validation
             if(logs == null)

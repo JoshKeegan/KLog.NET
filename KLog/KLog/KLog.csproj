@@ -46,6 +46,7 @@
     <Compile Include="ConcurrentFileLog.cs" />
     <Compile Include="DbLog.cs" />
     <Compile Include="DbLogParameter.cs" />
+    <Compile Include="ExtensionMethods\SystemExt\Collections\Generic\IEnumerableLogLevelExtensions.cs" />
     <Compile Include="InternalLog.cs" />
     <Compile Include="LogConcurrencyWrapper.cs" />
     <Compile Include="ConcurrentColouredConsoleLog.cs" />
