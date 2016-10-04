@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using KLog;
+using KLog.Programmatic;
 using KLog.Text;
 
 using Npgsql;
@@ -27,6 +28,7 @@ namespace Demo_KLog
         private const string LOGS_DIR = "logs";
         private const string INTERNAL_LOGS_DIR = LOGS_DIR + "/internal/";
         private const LogLevel LOG_LEVEL = LogLevel.All;
+        private const int CONCURRENCY_NUM_TASKS = 10;
 
         public static void Main(string[] args)
         {
@@ -90,6 +92,9 @@ namespace Demo_KLog
 
             //Run the File Log Rotation Demo
             fileLogRotationDemo();
+
+            // Run the Programmatic Log Demo
+            programmaticLogDemo();
 
             //Wait for anything in the default log to be written out
             DefaultLog.BlockWhileWriting();
@@ -172,7 +177,7 @@ namespace Demo_KLog
             using(DbLog dbLog = new DbLog(LOG_LEVEL, getDbConnection, getDbCommand, parameters, true, false))
             {
                 //Now the log's been made, lets abuse it
-                Task[] tasks = new Task[10];
+                Task[] tasks = new Task[CONCURRENCY_NUM_TASKS];
 
                 for (int i = 0; i < tasks.Length; i++)
                 {
@@ -246,6 +251,65 @@ namespace Demo_KLog
             //Clean up
             fileLog.BlockWhileWriting();
             fileLog.Dispose();
+        }
+
+        private static void programmaticLogDemo()
+        {
+            ConcurrentQueueLog cqLog = new ConcurrentQueueLog(LOG_LEVEL);
+
+            // Demo concurrency here as well
+            Task[] tasks = new Task[CONCURRENCY_NUM_TASKS];
+
+            for (int i = 0; i < tasks.Length; i++)
+            {
+                tasks[i] = Task.Factory.StartNew(() =>
+                {
+                    for (int j = 0; j < 100; j++)
+                    {
+                        cqLog.Debug("debug");
+                        cqLog.Info("info");
+                        cqLog.Warn("warn");
+                        cqLog.Error("error");
+                    }
+                });
+            }
+
+            // Wait for the worker threads to finish their business
+            Task.WaitAll(tasks);
+
+            // Read out the contents of the log
+            LogEntry logEntry;
+            Dictionary<string, int> messageCounts = new Dictionary<string, int>();
+            while (cqLog.Queue.TryDequeue(out logEntry))
+            {
+                // Can manipulate LogEntries as you please. 
+                //  Here we'll just sum up the number of times each distinct message has been logged
+                //  This could be running in another thread whilst the rest of the application runs as normal since the underlying data structure here is a ConcurrentQueue.
+                if (!messageCounts.ContainsKey(logEntry.Message))
+                {
+                    messageCounts.Add(logEntry.Message, 0);
+                }
+
+                messageCounts[logEntry.Message]++;
+            }
+
+            StringBuilder builder = new StringBuilder();
+            bool first = true;
+            foreach (KeyValuePair<string, int> kvp in messageCounts)
+            {
+                if (!first)
+                {
+                    builder.AppendLine();
+                }
+                else
+                {
+                    first = false;
+                }
+
+                builder.AppendFormat("{0}: {1}", kvp.Key, kvp.Value);
+            }
+
+            DefaultLog.Info("Post-processed programmatic log results:\n{0}", builder);
         }
     }
 }
