@@ -1,6 +1,6 @@
 ﻿/*
  * KLog.NET
- * LinkedListLog - Implementation of a Log that can have its messages queried programatically as a LinkedList
+ * ListLog - Implementation of a Log that can have its messages queried programatically as a List
  * Authors:
  *  Josh Keegan 04/10/2016
  */
@@ -13,19 +13,22 @@ using System.Threading.Tasks;
 
 namespace KLog.Programmatic
 {
-    public class LinkedListLog : Log
+    public class ListLog : Log
     {
         // Public Variables
-        public readonly LinkedList<LogEntry> List = new LinkedList<LogEntry>();
+        public readonly List<LogEntry> List;
 
         // Implement Log
         protected override void write(LogEntry entry)
         {
-            List.AddLast(entry);
+            List.Add(entry);
         }
 
         // Constructors
-        public LinkedListLog(LogLevel logLevel)
-            : base(logLevel) {  }
+        public ListLog(LogLevel logLevel, int listCapacity = 0)
+            : base(logLevel)
+        {
+            List = new List<LogEntry>(listCapacity);
+        }
     }
 }

@@ -63,6 +63,7 @@
     <Compile Include="LogRateLimiter.cs" />
     <Compile Include="NullLog.cs" />
     <Compile Include="Programmatic\LinkedListLog.cs" />
+    <Compile Include="Programmatic\ListLog.cs" />
     <Compile Include="Programmatic\StackLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlDbLogParameter.cs" />
