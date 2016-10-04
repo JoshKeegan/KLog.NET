@@ -62,6 +62,8 @@
     <Compile Include="Log.cs" />
     <Compile Include="LogRateLimiter.cs" />
     <Compile Include="NullLog.cs" />
+    <Compile Include="Programmatic\ConcurrentQueueLog.cs" />
+    <Compile Include="Programmatic\ConcurrentStackLog.cs" />
     <Compile Include="Programmatic\LinkedListLog.cs" />
     <Compile Include="Programmatic\ListLog.cs" />
     <Compile Include="Programmatic\QueueLog.cs" />
