@@ -201,6 +201,7 @@ namespace Demo_KLog
             Log internalLogBefore = InternalLog.Log;
 
             ConcurrentColouredConsoleLog internalLog = new ConcurrentColouredConsoleLog(LOG_LEVEL);
+            internalLog.Info("This method is about to put an error on the console. This is the intended behaviour.");
             InternalLog.Log = internalLog;
 
             //Use an EmailLog with incorrect SMTP server settings to trigger a call to the InternalLog
