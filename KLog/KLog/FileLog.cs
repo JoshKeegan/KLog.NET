@@ -107,6 +107,11 @@ namespace KLog
                     // thread safety
                     lock (logLock)
                     {
+                        // Re-evaluate without incrementing any counters to ensure the new file path hasn't been changed whilst waiting for a lock. 
+                        //  In a very highly multi-threaded enviromnent it was common for this to happen, causing a loop of constants new log files 
+                        //  being created. See Bug #9
+                        newFilePath = feFilePath.Eval(false);
+
                         //Check that another thread hasn't rotated the stream whilst waiting for the lock
                         if (filePath != newFilePath)
                         {
