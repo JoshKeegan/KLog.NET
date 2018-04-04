@@ -97,7 +97,9 @@ namespace KLog
                     InternalLog.Error("Error whilst sending email. Exception:\n{0}", e);
 
                     //No longer sending message
-                    currentlySending--;
+#pragma warning disable 420
+                    Interlocked.Decrement(ref currentlySending);
+#pragma warning restore 420
                 }
             }
         }
