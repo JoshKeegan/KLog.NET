@@ -2,6 +2,8 @@ version: 0.1.{build}
 
 configuration: Release
 
+image: Visual Studio 2017
+
 artifacts:
   - path: KLog\KLog\bin\Release\KLog.dll
     name: KLog.dll
