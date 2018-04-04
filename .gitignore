@@ -189,3 +189,6 @@ _Pvt_Extensions/
 ModelManifest.xml
 
 NuGet.exe
+
+# Visual Studio Dir
+.vs/
