@@ -5,9 +5,7 @@ configuration: Release
 image: Visual Studio 2017
 
 before_build:
-  - cmd: >-
-        nuget update -self
-        nuget restore
+  - cmd: beforeBuild.bat
 
 artifacts:
   - path: KLog\KLog\bin\Release\KLog.dll
