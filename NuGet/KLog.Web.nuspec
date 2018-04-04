@@ -12,7 +12,7 @@
     <copyright>Copyright Josh Keegan 2018</copyright>
     <tags>logging log diagnostics logfiles tracing web webapi mvc</tags>
 	<dependencies>
-		<dependency id="KLog.NET" version="[$klogVersion]" />
+		<dependency id="KLog.NET" version="[$klogVersion$]" />
 	</dependencies>
   </metadata>
   <files>
