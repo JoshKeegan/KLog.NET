@@ -18,9 +18,15 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading;
 
+using KLog.Text;
+
 namespace KLog
 {
-    public class EmailLog : TextLog, IDisposable
+    /// <summary>
+    /// Sends log entries by email asynchronously.
+    /// Note: Not suitable for use in web applications, use Klog.Web.WebEmailLog instead
+    /// </summary>
+    public class EmailLog : Log, IDisposable
     {
         #region Private Variables
 
@@ -30,32 +36,40 @@ namespace KLog
         private readonly int? smtpServerPort = null;
         private readonly string smtpUsername = null;
         private readonly string smtpPassword = null;
-        private readonly string subject = "Log Message (KLog.NET)";
+        private readonly LogEntryTextFormatter bodyFormatter;
         private volatile int currentlySending = 0;
+        private LogEntryTextFormatter subjectFormatter = new LogEntryTextFormatter("Log Message (KLog.NET)");
+
+        #endregion
+
+        #region Public Variables
+
+        public LogEntryTextFormatter SubjectFormatter
+        {
+            get => subjectFormatter;
+            set => subjectFormatter = value ?? throw new ArgumentNullException(nameof(value));
+        }
 
         #endregion
 
         #region Log Implementation
 
-        protected override void write(string message)
+        protected override void write(LogEntry entry)
         {
-            //TODO: Once TextLog has custom formatting options, they should be used to format the email body text, rather than it being done here
-            string body = String.Format("A message was logged:\n\n{0}", message);
+            // Format this entry as a string for both the subject & body
+            string subject = SubjectFormatter.Eval(entry);
+            string body = bodyFormatter.Eval(entry);
 
-            //Send an email to each of the listed to addresses
-            foreach(string toAddress in toAddresses)
+            // Send an email to each of the listed to addresses
+            foreach (string toAddress in toAddresses)
             {
+                // Construct the Mail Message
                 MailMessage mailMessage = new MailMessage(fromAddress, toAddress, subject, body);
 
-                SmtpClient smtpClient;
-                if (smtpServerPort == null)
-                {
-                    smtpClient = new SmtpClient(smtpServerHostname);
-                }
-                else
-                {
-                    smtpClient = new SmtpClient(smtpServerHostname, smtpServerPort.GetValueOrDefault());
-                }
+                // Construct the SMTP client
+                SmtpClient smtpClient = smtpServerPort == null
+                    ? new SmtpClient(smtpServerHostname)
+                    : new SmtpClient(smtpServerHostname, smtpServerPort.GetValueOrDefault());
 
                 if (smtpUsername != null)
                 {
@@ -63,44 +77,13 @@ namespace KLog
                     smtpClient.Credentials = creds;
                 }
 
-                //smtpClient.Send(mailMessage);
-                smtpClient.SendCompleted += (sender, eventArgs) =>
-                {
-                    //Dispose of the SMTP Client, hiding any exceptions from the client application.
-                    //  Instead they will get sent to the Internal Log which should be monitored during the development of an application
-                    try
-                    {
-                        smtpClient.Dispose();
-                    }
-                    catch (Exception e)
-                    {
-                        InternalLog.Error("Error whilst disposing of SMTP Client. Exception\n{0}", e);
-                    }
-
-                    //Message sent
-#pragma warning disable 420
-                    Interlocked.Decrement(ref currentlySending);
-#pragma warning restore 420
-                };
-#pragma warning disable 420
-                Interlocked.Increment(ref currentlySending);
-#pragma warning restore 420
-
-                //Hide any exceptions when sending this email. Don't want to break the client application due to a logging error
-                //  Instead they will get sent to the Internal Log which should be monitored during the development of an application
-                try
-                {
-                    smtpClient.SendAsync(mailMessage, null);
-                }
-                catch(Exception e)
-                {
-                    InternalLog.Error("Error whilst sending email. Exception:\n{0}", e);
-
-                    //No longer sending message
-#pragma warning disable 420
-                    Interlocked.Decrement(ref currentlySending);
-#pragma warning restore 420
-                }
+                // Send the message
+                //  Note that how the message gets sent is up to the implementation of the email log we're using.
+                //  Default (in this class) is smtpClient.SendAsync, but as sendEmail is virtual, it can be overridden.
+                //  This is important for use in websites, where having a Task still running after the end of the request
+                //  will mean it gets terminated, so this default implementation wouldn't work unless the tasks finished 
+                //  before the request.
+                sendEmail(mailMessage, smtpClient);
             }
         }
 
@@ -108,33 +91,33 @@ namespace KLog
 
         #region Constructors
 
-        public EmailLog(string fromAddress, string[] toAddresses, string smtpServerHostname, int? smtpServerPort, 
-            string smtpUsername, string smtpPassword, LogLevel logLevel)
+        public EmailLog(string fromAddress, string[] toAddresses, string smtpServerHostname, int? smtpServerPort,
+            string smtpUsername, string smtpPassword, LogLevel logLevel, LogEntryTextFormatter bodyFormatter = null)
             : base(logLevel)
         {
             //Validation
-            if(fromAddress == null)
+            if (fromAddress == null)
             {
                 throw new ArgumentNullException(nameof(fromAddress));
             }
-            if(toAddresses == null)
+            if (toAddresses == null)
             {
                 throw new ArgumentNullException(nameof(toAddresses));
             }
-            if(smtpServerHostname == null)
+            if (smtpServerHostname == null)
             {
                 throw new ArgumentNullException(nameof(smtpServerHostname));
             }
             //Validate fromAddress & toAddress are valid email addresses
-            if(!isValidEmailAddress(fromAddress))
+            if (!isValidEmailAddress(fromAddress))
             {
                 throw new ArgumentException("fromAddress is not a valid email address");
             }
-            if(!toAddresses.Any())
+            if (!toAddresses.Any())
             {
                 throw new ArgumentException("must specify at least one email in toAddresses");
             }
-            foreach(string toAddress in toAddresses)
+            foreach (string toAddress in toAddresses)
             {
                 if (!isValidEmailAddress(toAddress))
                 {
@@ -142,10 +125,10 @@ namespace KLog
                 }
             }
             //Validate smtpServerPort
-            if(smtpServerPort != null)
+            if (smtpServerPort != null)
             {
                 int port = smtpServerPort.GetValueOrDefault();
-                if(port <= 0 || port > 65535)
+                if (port <= 0 || port > 65535)
                 {
                     throw new ArgumentOutOfRangeException(nameof(smtpServerPort), "smtpServerPort must be null or in the range 1-65,535 (inclusive)");
                 }
@@ -157,28 +140,14 @@ namespace KLog
             this.smtpServerPort = smtpServerPort;
             this.smtpUsername = smtpUsername;
             this.smtpPassword = smtpPassword;
-        }
-
-        public EmailLog(string fromAddress, string[] toAddresses, string smtpServerHostname, 
-            string smtpUsername, string smtpPassword, LogLevel logLevel)
-            : this(fromAddress, toAddresses, smtpServerHostname, (int?)null, smtpUsername, 
-            smtpPassword, logLevel) {  }
-
-        public EmailLog(string fromAddress, string[] toAddresses, string smtpServerHostname, int? smtpServerPort,
-            string smtpUsername, string smtpPassword, string subject, LogLevel logLevel)
-            : this(fromAddress, toAddresses, smtpServerHostname, smtpServerPort, smtpUsername, smtpPassword, logLevel)
-        {
-            //Only set the subject if we've been supplied with one, otherwise keep the default
-            if(subject != null)
-            {
-                this.subject = subject;
-            }
+            this.bodyFormatter = bodyFormatter ??
+                                 new LogEntryTextFormatter("A message was logged:\n\n", TextLog.DEFAULT_FORMATTER);
         }
 
         public EmailLog(string fromAddress, string[] toAddresses, string smtpServerHostname,
-            string smtpUsername, string smtpPassword, string subject, LogLevel logLevel)
-            : this(fromAddress, toAddresses, smtpServerHostname, null, smtpUsername, smtpPassword, 
-            subject, logLevel) { }
+            string smtpUsername, string smtpPassword, LogLevel logLevel)
+            : this(fromAddress, toAddresses, smtpServerHostname, null, smtpUsername,
+                smtpPassword, logLevel) {  }
 
         //TODO: Add more constructors which don't require optional fields
 
@@ -194,16 +163,6 @@ namespace KLog
             string smtpUsername, string smtpPassword, LogLevel logLevel)
             : this(fromAddress, new string[] { toAddress }, smtpServerHostname,
             smtpUsername, smtpPassword, logLevel) {  }
-
-        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname, int? smtpServerPort,
-            string smtpUsername, string smtpPassword, string subject, LogLevel logLevel)
-            : this(fromAddress, new string[] { toAddress }, smtpServerHostname, smtpServerPort,
-            smtpUsername, smtpPassword, subject, logLevel) {  }
-
-        public EmailLog(string fromAddress, string toAddress, string smtpServerHostname,
-            string smtpUsername, string smtpPassword, string subject, LogLevel logLevel)
-            : this(fromAddress, new string[] { toAddress }, smtpServerHostname,
-            smtpUsername, smtpPassword, subject, logLevel) {  }
 
         #endregion
 
@@ -246,6 +205,62 @@ namespace KLog
             }
 
             //Dispose or finalizer, free any native resources
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        protected virtual void sendEmail(MailMessage mailMessage, SmtpClient smtpClient)
+        {
+            //smtpClient.Send(mailMessage);
+            smtpClient.SendCompleted += (sender, eventArgs) =>
+            {
+                // Dispose of the SMTP Client, hiding any exceptions from the client application.
+                //  Instead they will get sent to the Internal Log which should be monitored during the development of an application
+                try
+                {
+                    smtpClient.Dispose();
+                }
+                catch (Exception e)
+                {
+                    InternalLog.Error("Error whilst disposing of SMTP Client. Exception\n{0}", e);
+                }
+
+                // Message sent
+                decrementCurrentlySending();
+            };
+            incrementCurrentlySending();
+
+            // Hide any exceptions when sending this email. Don't want to break the client application due to a logging error
+            //  Instead they will get sent to the Internal Log which should be monitored during the development of an application
+            try
+            {
+                smtpClient.SendAsync(mailMessage, null);
+            }
+            catch (Exception e)
+            {
+                InternalLog.Error("Error whilst sending email. Exception:\n{0}", e);
+
+                // No longer sending message
+                decrementCurrentlySending();
+            }
+        }
+
+        // Have halper methods so that anyone extending this class doesn't need to worry about
+        //  the thread safety of currentlySending
+        protected void incrementCurrentlySending()
+        {
+#pragma warning disable 420
+            Interlocked.Increment(ref currentlySending);
+#pragma warning restore 420
+        }
+
+        protected void decrementCurrentlySending()
+        {
+#pragma warning disable 420
+            Interlocked.Decrement(ref currentlySending);
+#pragma warning restore 420
         }
 
         #endregion

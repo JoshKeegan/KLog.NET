@@ -17,10 +17,18 @@ namespace KLog
 {
     public abstract class TextLog : Log
     {
-        //Private Variables
-        private readonly LogEntryTextFormatter formatter;
+        // Constants
+        public static readonly LogEntryTextFormatter DEFAULT_FORMATTER = 
+            new LogEntryTextFormatter(
+            new FeStringDateTime("yyyy-MM-dd HH:mm:ss"), " - ",
+            new FeCallingMethodFullName(), ": ",
+            new FeLogLevel(), ": ",
+            new FeMessage());
 
-        //Implement Log
+        // Protected Variables
+        protected readonly LogEntryTextFormatter formatter;
+
+        // Implement Log
         protected override void write(LogEntry entry)
         {
             //Format this entry as a string
@@ -32,7 +40,7 @@ namespace KLog
 
         protected abstract void write(string message);
 
-        //Constructors
+        // Constructors
         public TextLog(LogLevel logLevel, LogEntryTextFormatter formatter)
             : base(logLevel) 
         {
@@ -40,11 +48,7 @@ namespace KLog
         }
 
         public TextLog(LogLevel logLevel)
-            : this(logLevel, 
-            new LogEntryTextFormatter(
-                new FeStringDateTime("yyyy-MM-dd HH:mm:ss"), " - ",
-                new FeCallingMethodFullName(), ": ",
-                new FeLogLevel(), ": ",
-                new FeMessage())) {  }
+            : this(logLevel, DEFAULT_FORMATTER
+            ) {  }
     }
 }

@@ -50,10 +50,14 @@ namespace Demo_KLog
             Log consoleLog = new ConcurrentColouredConsoleLog(LOG_LEVEL);
 
             //Email logging
-            EmailLog emailLog = new EmailLog("test@visav.net", 
-                new string[] { "josh@visav.co.uk", "josh.keegan@gmx.com" }, 
-                "mail.visav.net", "test@visav.net", "Qwerty1234", "KLog Demo Email", 
-                LogLevel.Error);
+            EmailLog emailLog = new EmailLog("test@visav.net",
+                new string[] { "josh@visav.co.uk", "josh.keegan@gmx.com" },
+                "mail.visav.net", "test@visav.net", "Qwerty1234",
+                LogLevel.Error)
+            {
+                SubjectFormatter = new LogEntryTextFormatter("KLog Demo Email")
+            };
+
 
             //Initialise file logging
             Log fileLog = new FileLog(new FileLogNameTextFormatter(

@@ -17,10 +17,16 @@ namespace KLog.Text
     {
         public static object Eval(object o)
         {
-            if(o is IFormattingEntity)
+            if(o is IFormattingEntity fe)
             {
-                IFormattingEntity e = (IFormattingEntity)o;
-                object evaluated = e.Eval();
+                object evaluated = fe.Eval();
+
+                //Allow for Formatting Entity chaining
+                return Eval(evaluated);
+            }
+            else if (o is LogEntryTextFormatter letf)
+            {
+                object evaluated = letf.Eval();
 
                 //Allow for Formatting Entity chaining
                 return Eval(evaluated);
@@ -33,20 +39,25 @@ namespace KLog.Text
 
         public static object Eval(object o, LogEntry entry)
         {
-            if(o is LogEntryFormattingEntity)
+            if(o is LogEntryFormattingEntity lefe)
             {
-                LogEntryFormattingEntity e = (LogEntryFormattingEntity)o;
-                object evaluated = e.Eval(entry);
+                object evaluated = lefe.Eval(entry);
+
+                // Allow for Formatting Entity chaining
+                return Eval(evaluated, entry);
+            }
+            else if (o is LogEntryTextFormatter letf)
+            {
+                object evaluated = letf.Eval(entry);
 
                 //Allow for Formatting Entity chaining
                 return Eval(evaluated, entry);
             }
-            else if(o is IFormattingEntity)
+            else if(o is IFormattingEntity fe)
             {
-                IFormattingEntity e = (IFormattingEntity)o;
-                return Eval(e);
+                return Eval(fe);
             }
-            else //No more evaluation to be performed
+            else // No more evaluation to be performed
             {
                 return o;
             }

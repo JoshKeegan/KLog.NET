@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KLog", "KLog\KLog.csproj", "{A5890FBE-7970-419F-9F73-B9A31E98A267}"
 EndProject
@@ -17,6 +17,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo KLog", "Demo KLog\Demo KLog.csproj", "{E6B54C17-36D6-4D22-9DE0-292921294FFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceTests", "PerformanceTests\PerformanceTests.csproj", "{07A5ADBD-6DEE-447D-831B-478B9B07C22A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KLog.Web", "KLog.Web\KLog.Web.csproj", "{12F1FA38-2318-4493-899E-67390A0125D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo KLog WebAPI", "Demo KLog WebAPI\Demo KLog WebAPI.csproj", "{5F9235D8-B740-403C-A39F-57A59F19369D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,8 +44,19 @@ Global
 		{07A5ADBD-6DEE-447D-831B-478B9B07C22A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07A5ADBD-6DEE-447D-831B-478B9B07C22A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07A5ADBD-6DEE-447D-831B-478B9B07C22A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12F1FA38-2318-4493-899E-67390A0125D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12F1FA38-2318-4493-899E-67390A0125D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12F1FA38-2318-4493-899E-67390A0125D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12F1FA38-2318-4493-899E-67390A0125D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F9235D8-B740-403C-A39F-57A59F19369D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F9235D8-B740-403C-A39F-57A59F19369D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F9235D8-B740-403C-A39F-57A59F19369D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F9235D8-B740-403C-A39F-57A59F19369D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5D90B19-7CC0-43F0-9CB4-03D1FF842A2C}
 	EndGlobalSection
 EndGlobal
