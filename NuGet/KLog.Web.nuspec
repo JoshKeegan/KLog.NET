@@ -1,18 +1,21 @@
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <id>KLog.NET</id>
+    <id>KLog.Web</id>
     <version>$version$</version>
     <authors>Josh Keegan</authors>
     <licenseUrl>https://github.com/JoshKeegan/KLog.NET/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/JoshKeegan/KLog.NET</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>KISS .NET logging library</description>
+    <description>KISS .NET logging library Web assembly</description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright Josh Keegan 2011-2018</copyright>
-    <tags>logging log diagnostics logfiles tracing</tags>
+    <copyright>Copyright Josh Keegan 2018</copyright>
+    <tags>logging log diagnostics logfiles tracing web webapi mvc</tags>
+	<dependencies>
+		<dependency id="KLog.NET" version="[$klogVersion]" />
+	</dependencies>
   </metadata>
   <files>
-	<file src="..\KLog\KLog\bin\Release\KLog.dll" target="lib" />
+	<file src="..\KLog\KLog.Web\bin\Release\KLog.Web.dll" target="lib" />
   </files>
 </package>
