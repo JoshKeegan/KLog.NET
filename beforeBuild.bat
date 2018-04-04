@@ -1,2 +1,2 @@
 nuget update -self
-nuget restore
+nuget restore KLog/KLog.sln
