@@ -1,7 +1,7 @@
 language: csharp
 
 script:
-  - xbuild /p:Configuration=Release-mono-compat KLog/KLog.sln
+  - msbuild /p:Configuration=Release-mono-compat KLog/KLog.sln
 
 before_install:
   - chmod +x fetchNuGet.sh
