@@ -11,8 +11,10 @@
         <RepositoryType>git</RepositoryType>
         <PackageLicenseUrl>https://github.com/JoshKeegan/KLog.NET/blob/master/LICENSE</PackageLicenseUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Description>KLog.NET</Description>
+        <Description>KISS .NET logging library</Description>
         <Copyright>Copyright © Josh Keegan 2012-2018</Copyright>
+        <PackageId>KLog.NET</PackageId>
+        <PackageTags>logging log diagnostics logfiles tracing</PackageTags>
     </PropertyGroup>
     <ItemGroup>
       <PackageReference Include="System.Data.SqlClient" Version="4.5.0" />
