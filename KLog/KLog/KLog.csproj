@@ -1,95 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A5890FBE-7970-419F-9F73-B9A31E98A267}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KLog</RootNamespace>
-    <AssemblyName>KLog</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ColouredConsoleLog.cs" />
-    <Compile Include="ConcurrentFileLog.cs" />
-    <Compile Include="DbLog.cs" />
-    <Compile Include="DbLogParameter.cs" />
-    <Compile Include="ExtensionMethods\SystemExt\Collections\Generic\IEnumerableLogLevelExtensions.cs" />
-    <Compile Include="InternalLog.cs" />
-    <Compile Include="LogConcurrencyWrapper.cs" />
-    <Compile Include="ConcurrentColouredConsoleLog.cs" />
-    <Compile Include="CompoundLog.cs" />
-    <Compile Include="ConsoleLog.cs" />
-    <Compile Include="DefaultLog.cs" />
-    <Compile Include="EmailLog.cs" />
-    <Compile Include="FileLog.cs" />
-    <Compile Include="LogEntry.cs" />
-    <Compile Include="LogFilter.cs" />
-    <Compile Include="LogLevel.cs" />
-    <Compile Include="Helpers\ReflectionHelpers.cs" />
-    <Compile Include="Log.cs" />
-    <Compile Include="LogRateLimiter.cs" />
-    <Compile Include="NullLog.cs" />
-    <Compile Include="Programmatic\ConcurrentQueueLog.cs" />
-    <Compile Include="Programmatic\ConcurrentStackLog.cs" />
-    <Compile Include="Programmatic\LinkedListLog.cs" />
-    <Compile Include="Programmatic\ListLog.cs" />
-    <Compile Include="Programmatic\QueueLog.cs" />
-    <Compile Include="Programmatic\StackLog.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlDbLogParameter.cs" />
-    <Compile Include="TextLog.cs" />
-    <Compile Include="Text\FeDateTime.cs" />
-    <Compile Include="Text\FeEvalCounter.cs" />
-    <Compile Include="Text\FeStringEvalCounter.cs" />
-    <Compile Include="Text\FileLogNameTextFormatter.cs" />
-    <Compile Include="Text\FormattingEntityEvaluator.cs" />
-    <Compile Include="Text\LogEntryFormattingEntity.cs" />
-    <Compile Include="Text\LogEntryTextFormatter.cs" />
-    <Compile Include="Text\IFormattingEntity.cs" />
-    <Compile Include="Text\FeCallingMethodFullName.cs" />
-    <Compile Include="Text\FeLogLevel.cs" />
-    <Compile Include="Text\FeMessage.cs" />
-    <Compile Include="Text\FeStringDateTime.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <AssemblyVersion>0.3.0.0</AssemblyVersion>
+        <FileVersion>0.3.0.0</FileVersion>
+        <Authors>Josh Keegan</Authors>
+        <Company />
+        <Version>0.3.0</Version>
+        <PackageProjectUrl>https://github.com/JoshKeegan/KLog.NET</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/JoshKeegan/KLog.NET</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseUrl>https://github.com/JoshKeegan/KLog.NET/blob/master/LICENSE</PackageLicenseUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Description>KLog.NET</Description>
+        <Copyright>Copyright © Josh Keegan 2012-2018</Copyright>
+    </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="System.Data.SqlClient" Version="4.5.0" />
+    </ItemGroup>
 </Project>
